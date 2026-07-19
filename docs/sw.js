@@ -1,16 +1,16 @@
 // ちょめめマップ Service Worker
 // バージョン更新時は VERSION と index.html の ?v=NN を揃えて上げること
-const VERSION = "v1";
+const VERSION = "v2";
 const SHELL_CACHE = `chomeme-shell-${VERSION}`;
 const DATA_CACHE = "chomeme-data";
 
 const SHELL = [
   "./",
-  `./index.html?v=1`,
+  `./index.html?v=2`,
   "./manifest.json",
   "./icon-192.png",
-  "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
-  "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+  "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css",
+  "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js",
 ];
 
 self.addEventListener("install", (e) => {
@@ -47,8 +47,10 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // 地図タイルはキャッシュしない(容量対策)
-  if (url.hostname.endsWith("tile.openstreetmap.org") || url.hostname === "img.youtube.com") {
+  // 地図のベクトルタイル・フォント・サムネはキャッシュしない(容量対策)
+  if (url.hostname === "tiles.openfreemap.org" ||
+      url.hostname === "maps.gsi.go.jp" ||
+      url.hostname === "img.youtube.com") {
     return;
   }
 

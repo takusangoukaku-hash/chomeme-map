@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <style>
   html, body { height: 100%; margin: 0; font-family: "Hiragino Sans", "Yu Gothic", sans-serif; }
   #app { display: flex; flex-direction: column; height: 100%; }
@@ -21,20 +21,32 @@
   }
   header h1 { margin: 0; font-size: 1.1rem; }
   header .sub { font-size: .75rem; opacity: .9; }
-  #map { flex: 1; }
-  .popup { width: 230px; }
-  .popup img { width: 100%; border-radius: 6px; display: block; }
+  .count { font-size: .75rem; }
+  .updated { font-size: .68rem; opacity: .8; margin-left: auto; }
+  #map-canvas { flex: 1; }
+
+  /* ポップアップ（グルメアプリと同系統の見た目） */
+  .maplibregl-popup-content {
+    padding: 10px; border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,.18); font-family: inherit;
+  }
+  .popup { width: 220px; }
+  .popup img { width: 100%; border-radius: 8px; display: block; }
   .popup .shop { font-weight: 700; margin: 6px 0 2px; font-size: .95rem; }
-  .popup .addr { font-size: .72rem; color: #555; margin-bottom: 4px; }
+  .popup .addr { font-size: .72rem; color: #777; margin-bottom: 4px; }
   .popup a.vid { display: block; font-size: .8rem; margin-top: 4px; text-decoration: none; color: #1a0dab; }
   .popup .badge {
     display: inline-block; background: #c8382e; color: #fff; border-radius: 4px;
     font-size: .65rem; padding: 1px 5px; margin-right: 4px; vertical-align: middle;
   }
   .popup .badge.new { background: #1a9c46; }
-  .count { font-size: .75rem; }
-  .updated { font-size: .68rem; opacity: .8; margin-left: auto; }
-  .marker-new { filter: hue-rotate(230deg) saturate(1.6); }
+
+  @media (prefers-color-scheme: dark) {
+    .maplibregl-popup-content { background: #2a2b31; color: #e8e6e1; }
+    .maplibregl-popup-tip { border-top-color: #2a2b31 !important; border-bottom-color: #2a2b31 !important; }
+    .popup .addr { color: #aaa; }
+    .popup a.vid { color: #8ab4f8; }
+  }
 </style>
 </head>
 <body>
@@ -45,88 +57,274 @@
     <span class="count" id="count"></span>
     <span class="updated" id="updated"></span>
   </header>
-  <div id="map"></div>
+  <div id="map-canvas"></div>
 </div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script>
-const map = L.map("map").setView([35.68, 139.76], 6);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  maxZoom: 19,
-}).addTo(map);
+// ===== グルメアプリ(gourmet-app)と同じベクトル地図スタイル =====
+// Apple Maps風の配色・ラベル制御・OpenFreeMapベクトルタイル・国土地理院フォント
+const JA_NAME = ['coalesce', ['get', 'name:ja'], ['get', 'name']];
+const FONT = ['NotoSansCJKjp-Regular'];
 
-function fmtTime(sec) {
-  if (sec == null) return "";
-  const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
-  return `${m}:${String(s).padStart(2, "0")}`;
+function baseMapStyle(dark) {
+  const c = dark ? {
+    bg: '#212227', water: '#17344d', park: '#26372a', wood: '#223125',
+    building: '#2a2b31', roadMinor: '#33353b', roadMain: '#43464e',
+    roadCasing: '#1b1c20', highway: '#8d7439', rail: '#45464c',
+    boundary: '#4a4658', text: '#c9c7c2', halo: '#1a1b1f',
+    station: '#8fb0e8', poi: '#98938a',
+  } : {
+    bg: '#f5f4ef', water: '#a9d1e6', park: '#c8e2ae', wood: '#b9d8a0',
+    building: '#e8e4db', roadMinor: '#ffffff', roadMain: '#ffffff',
+    roadCasing: '#e2ddd2', highway: '#f9d975', rail: '#cfc9bf',
+    boundary: '#bcb2cb', text: '#55524c', halo: '#ffffff',
+    station: '#3a6db4', poi: '#85806f',
+  };
+  const label = (id, layer, filter, minzoom, size, color, haloW) => ({
+    id, type: 'symbol', source: 'omt', 'source-layer': layer, minzoom,
+    filter,
+    layout: {
+      'text-field': JA_NAME, 'text-font': FONT, 'text-size': size,
+      'text-max-width': 9, 'text-padding': 4,
+    },
+    paint: { 'text-color': color, 'text-halo-color': c.halo, 'text-halo-width': haloW },
+  });
+  const POI_COLOR = ['match', ['get', 'class'],
+    ['restaurant', 'fast_food', 'cafe', 'bar', 'beer', 'pub', 'ice_cream', 'food_court'], '#ef6c34',
+    ['convenience', 'grocery', 'supermarket', 'shop', 'clothing_store', 'bakery',
+      'books', 'gift', 'florist', 'butcher', 'bicycle', 'car', 'laundry', 'department_store'], '#3478f6',
+    '#12a56b'];
+  const POI_FILTER = ['all',
+    ['has', 'name'],
+    ['!', ['in', ['get', 'class'],
+      ['literal', ['railway', 'bus', 'college', 'stadium', 'museum', 'zoo', 'aquarium',
+        'theme_park', 'castle', 'airport', 'park', 'cemetery', 'ferry_terminal', 'harbor']]]]];
+  return {
+    version: 8,
+    glyphs: 'https://maps.gsi.go.jp/xyz/noto-jp/{fontstack}/{range}.pbf',
+    sources: {
+      omt: { type: 'vector', url: 'https://tiles.openfreemap.org/planet' },
+    },
+    layers: [
+      { id: 'bg', type: 'background', paint: { 'background-color': c.bg } },
+      { id: 'landcover-wood', type: 'fill', source: 'omt', 'source-layer': 'landcover',
+        filter: ['==', ['get', 'class'], 'wood'], paint: { 'fill-color': c.wood, 'fill-opacity': 0.6 } },
+      { id: 'landcover-grass', type: 'fill', source: 'omt', 'source-layer': 'landcover',
+        filter: ['==', ['get', 'class'], 'grass'], paint: { 'fill-color': c.park, 'fill-opacity': 0.5 } },
+      { id: 'landuse-green', type: 'fill', source: 'omt', 'source-layer': 'landuse',
+        filter: ['in', ['get', 'class'], ['literal', ['pitch', 'cemetery', 'stadium']]],
+        paint: { 'fill-color': c.park, 'fill-opacity': 0.6 } },
+      { id: 'park', type: 'fill', source: 'omt', 'source-layer': 'park',
+        paint: { 'fill-color': c.park, 'fill-opacity': 0.75 } },
+      { id: 'water', type: 'fill', source: 'omt', 'source-layer': 'water',
+        paint: { 'fill-color': c.water } },
+      { id: 'waterway', type: 'line', source: 'omt', 'source-layer': 'waterway',
+        paint: { 'line-color': c.water, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 0.7, 16, 3] } },
+      { id: 'building', type: 'fill', source: 'omt', 'source-layer': 'building', minzoom: 14,
+        paint: { 'fill-color': c.building, 'fill-opacity': ['interpolate', ['linear'], ['zoom'], 14, 0.4, 16, 0.9] } },
+      { id: 'road-service', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 14,
+        filter: ['in', ['get', 'class'], ['literal', ['service', 'track', 'path']]],
+        paint: { 'line-color': c.roadMinor, 'line-width': ['interpolate', ['linear'], ['zoom'], 14, 0.6, 18, 4] } },
+      { id: 'road-minor-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 13,
+        filter: ['==', ['get', 'class'], 'minor'], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadCasing, 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 1.6, 18, 9] } },
+      { id: 'road-minor', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 12,
+        filter: ['==', ['get', 'class'], 'minor'], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadMinor, 'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.7, 13, 1, 18, 7.5] } },
+      { id: 'road-mid-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 10,
+        filter: ['in', ['get', 'class'], ['literal', ['secondary', 'tertiary']]], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadCasing, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1.0, 13, 2.2, 18, 12] } },
+      { id: 'road-mid', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 10,
+        filter: ['in', ['get', 'class'], ['literal', ['secondary', 'tertiary']]], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadMain, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 0.5, 13, 1.5, 18, 10] } },
+      { id: 'road-major-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 8,
+        filter: ['in', ['get', 'class'], ['literal', ['primary', 'trunk']]], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadCasing, 'line-width': ['interpolate', ['linear'], ['zoom'], 8, 0.9, 12, 2.2, 14, 4.5, 18, 14] } },
+      { id: 'road-major', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 8,
+        filter: ['in', ['get', 'class'], ['literal', ['primary', 'trunk']]], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadMain, 'line-width': ['interpolate', ['linear'], ['zoom'], 8, 0.6, 12, 1.5, 14, 3.2, 18, 12] } },
+      { id: 'motorway-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 6,
+        filter: ['==', ['get', 'class'], 'motorway'], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': dark ? '#5c4c22' : '#e8bd50', 'line-width': ['interpolate', ['linear'], ['zoom'], 6, 0.7, 10, 1.7, 13, 4.5, 18, 15] } },
+      { id: 'motorway', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 6,
+        filter: ['==', ['get', 'class'], 'motorway'], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.highway, 'line-width': ['interpolate', ['linear'], ['zoom'], 6, 0.5, 10, 1.2, 13, 3.2, 18, 12] } },
+      { id: 'rail', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 11,
+        filter: ['==', ['get', 'class'], 'rail'],
+        paint: { 'line-color': c.rail, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.8, 16, 2.2] } },
+      { id: 'boundary', type: 'line', source: 'omt', 'source-layer': 'boundary', minzoom: 5,
+        filter: ['<=', ['get', 'admin_level'], 4],
+        paint: { 'line-color': c.boundary, 'line-width': 1, 'line-dasharray': [3, 2] } },
+      label('place-city', 'place', ['==', ['get', 'class'], 'city'], 4,
+        ['interpolate', ['linear'], ['zoom'], 5, 10, 12, 13], c.text, 1.4),
+      label('place-town', 'place', ['==', ['get', 'class'], 'town'], 9,
+        ['interpolate', ['linear'], ['zoom'], 9, 9.5, 14, 12], c.text, 1.3),
+      label('station-label', 'poi', ['==', ['get', 'class'], 'railway'], 12,
+        ['interpolate', ['linear'], ['zoom'], 12, 9.5, 16, 12], c.station, 1.2),
+      label('poi-major', 'poi',
+        ['any',
+          ['all', ['==', ['get', 'class'], 'college'], ['==', ['get', 'subclass'], 'university']],
+          ['in', ['get', 'class'], ['literal', ['stadium', 'museum', 'zoo', 'aquarium', 'theme_park', 'castle']]],
+        ], 14, 10.5, c.poi, 1.2),
+      label('airport-label', 'aerodrome_label', ['has', 'iata'], 9, 10.5, c.poi, 1.2),
+      { id: 'poi-labels', type: 'symbol', source: 'omt', 'source-layer': 'poi', minzoom: 16,
+        filter: POI_FILTER,
+        layout: {
+          'text-field': JA_NAME, 'text-font': FONT, 'text-size': 10.5, 'text-max-width': 8,
+          'symbol-sort-key': ['coalesce', ['get', 'rank'], 100],
+        },
+        paint: { 'text-color': POI_COLOR, 'text-halo-color': c.halo, 'text-halo-width': 1.2 } },
+    ],
+  };
 }
 
+// ===== ちょめめマップ本体 =====
+const CHOMEME_RED = '#c8382e';
+const NEW_GREEN = '#1a9c46';
 const NEW_DAYS = 14;
+const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+function fmtTime(sec) {
+  if (sec == null) return '';
+  const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
 function isNew(added) {
   if (!added) return false;
   const d = new Date(`${added.slice(0,4)}-${added.slice(4,6)}-${added.slice(6,8)}`);
   return (Date.now() - d.getTime()) < NEW_DAYS * 86400e3;
 }
-
 const srcBadge = {
   transcript: (v) => `<span class="badge">🎙 ${fmtTime(v.t)}</span>`,
   compilation: (v) => `<span class="badge">📀 総集編 ${fmtTime(v.t)}</span>`,
   title: () => `<span class="badge">📺</span>`,
 };
 
-fetch("shops.json").then(r => r.json()).then(data => {
+// ピン/クラスターの大きさ（グルメアプリと同じ式）
+const PIN_RADIUS = ['interpolate', ['linear'], ['zoom'], 8, 1.5, 10, 1.8, 12, 3.6, 14, 5.4, 15, 6, 20, 6];
+const CSTEP = ['step', ['get', 'point_count'], 1, 10, 2, 30, 3];
+const CLUSTER_RADIUS = ['interpolate', ['linear'], ['zoom'],
+  8, ['+', 2, CSTEP], 10, ['+', 2.4, CSTEP], 12, ['+', 4.4, CSTEP],
+  14, ['+', 6.2, CSTEP], 15, ['+', 7, CSTEP], 20, ['+', 7, CSTEP]];
+
+const map = new maplibregl.Map({
+  container: 'map-canvas',
+  style: baseMapStyle(dark),
+  center: [138.5, 37.5], zoom: 4.3, minZoom: 3, maxZoom: 20,
+  attributionControl: { compact: true },
+});
+map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'bottom-right');
+map.on('error', (e) => console.warn('MapLibre:', e && e.error));
+
+let mapPopup = null;
+
+map.on('load', async () => {
+  const res = await fetch('shops.json');
+  const data = await res.json();
   const shops = Array.isArray(data) ? data : data.shops;
   if (data.updated) {
-    document.getElementById("updated").textContent =
-      `更新: ${new Date(data.updated).toLocaleDateString("ja-JP")}`;
+    document.getElementById('updated').textContent =
+      `更新: ${new Date(data.updated).toLocaleDateString('ja-JP')}`;
   }
-  document.getElementById("count").textContent = `${shops.length}店舗`;
-  const markers = [];
+  document.getElementById('count').textContent = `${shops.length}店舗`;
+
+  const features = [];
+  const bounds = new maplibregl.LngLatBounds();
   for (const shop of shops) {
     if (shop.lat == null) continue;
-    const fresh = isNew(shop.added);
-    const v0 = shop.videos[0];
-    const vidLinks = shop.videos.map(v => {
-      const t = v.t != null ? `&t=${Math.max(0, Math.floor(v.t) - 5)}s` : "";
-      const badge = (srcBadge[v.source] || srcBadge.title)(v);
-      return `<a class="vid" href="https://www.youtube.com/watch?v=${v.id}${t}" target="_blank" rel="noopener">${badge}${v.title}</a>`;
-    }).join("");
-    const html = `
-      <div class="popup">
-        <a href="https://www.youtube.com/watch?v=${v0.id}" target="_blank" rel="noopener">
-          <img src="https://img.youtube.com/vi/${v0.id}/mqdefault.jpg" alt="" loading="lazy">
-        </a>
-        <div class="shop">${fresh ? '<span class="badge new">NEW</span>' : ""}${shop.name}</div>
-        <div class="addr">${shop.address ?? ""}</div>
-        ${vidLinks}
-      </div>`;
-    const m = L.marker([shop.lat, shop.lng]).addTo(map).bindPopup(html);
-    if (fresh) {
-      m.once("add", () => m.getElement()?.classList.add("marker-new"));
-      if (m.getElement()) m.getElement().classList.add("marker-new");
-    }
-    markers.push(m);
+    features.push({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [shop.lng, shop.lat] },
+      properties: {
+        name: shop.name,
+        fresh: isNew(shop.added) ? 1 : 0,
+        shop: JSON.stringify(shop),
+      },
+    });
+    bounds.extend([shop.lng, shop.lat]);
   }
-  if (markers.length) {
-    const bounds = L.featureGroup(markers).getBounds().pad(0.1);
-    // 非表示状態でロードされるとコンテナサイズ0でfitBoundsがzoom 0になるため、
-    // サイズが確定してからfitする
-    const fit = () => {
-      map.invalidateSize();
-      const s = map.getSize();
-      if (s.x > 0 && s.y > 0) map.fitBounds(bounds);
-      else setTimeout(fit, 250);
-    };
-    fit();
-    window.addEventListener("resize", () => map.invalidateSize());
+
+  map.addSource('shops', {
+    type: 'geojson',
+    data: { type: 'FeatureCollection', features },
+    cluster: true, clusterMaxZoom: 11, clusterRadius: 40,
+    clusterProperties: { anyNew: ['max', ['get', 'fresh']] },
+  });
+
+  // クラスター（新着を含むと緑、それ以外は赤）
+  map.addLayer({ id: 'clusters', type: 'circle', source: 'shops',
+    filter: ['has', 'point_count'],
+    paint: {
+      'circle-color': ['case', ['==', ['get', 'anyNew'], 1], NEW_GREEN, CHOMEME_RED],
+      'circle-radius': CLUSTER_RADIUS,
+      'circle-stroke-color': '#fff',
+      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11, 0, 12, 1],
+    } });
+  // 個別ピン
+  map.addLayer({ id: 'pins', type: 'circle', source: 'shops',
+    filter: ['!', ['has', 'point_count']],
+    paint: {
+      'circle-color': ['case', ['==', ['get', 'fresh'], 1], NEW_GREEN, CHOMEME_RED],
+      'circle-radius': PIN_RADIUS,
+      'circle-stroke-color': '#ffffff',
+      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11, 1.2, 12, 2],
+    } });
+  // 店名ラベル（z12以上）
+  map.addLayer({ id: 'pin-labels', type: 'symbol', source: 'shops', minzoom: 12,
+    filter: ['!', ['has', 'point_count']],
+    layout: {
+      'text-field': ['get', 'name'], 'text-font': FONT, 'text-size': 10,
+      'text-anchor': 'bottom', 'text-offset': [0, -0.9], 'text-max-width': 12,
+    },
+    paint: {
+      'text-color': dark ? '#e8e6e1' : '#3a3833',
+      'text-halo-color': dark ? '#1a1b1f' : '#ffffff', 'text-halo-width': 1.2,
+    } });
+
+  map.on('click', 'pins', (e) => openShopPopup(e.features[0]));
+  map.on('click', 'clusters', (e) => {
+    const f = e.features[0];
+    map.getSource('shops').getClusterExpansionZoom(f.properties.cluster_id)
+      .then(z => map.easeTo({ center: f.geometry.coordinates, zoom: z }));
+  });
+  ['pins', 'clusters'].forEach(id => {
+    map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; });
+  });
+
+  if (features.length) {
+    map.fitBounds(bounds, { padding: 40, maxZoom: 12, duration: 0 });
   }
 });
 
+function openShopPopup(feature) {
+  const shop = JSON.parse(feature.properties.shop);
+  const fresh = isNew(shop.added);
+  const v0 = shop.videos[0];
+  const vidLinks = shop.videos.map(v => {
+    const t = v.t != null ? `&t=${Math.max(0, Math.floor(v.t) - 5)}s` : '';
+    const badge = (srcBadge[v.source] || srcBadge.title)(v);
+    return `<a class="vid" href="https://www.youtube.com/watch?v=${v.id}${t}" target="_blank" rel="noopener">${badge}${v.title}</a>`;
+  }).join('');
+  const node = document.createElement('div');
+  node.className = 'popup';
+  node.innerHTML = `
+    <a href="https://www.youtube.com/watch?v=${v0.id}" target="_blank" rel="noopener">
+      <img src="https://img.youtube.com/vi/${v0.id}/mqdefault.jpg" alt="" loading="lazy">
+    </a>
+    <div class="shop">${fresh ? '<span class="badge new">NEW</span>' : ''}${shop.name}</div>
+    <div class="addr">${shop.address ?? ''}</div>
+    ${vidLinks}`;
+  if (mapPopup) mapPopup.remove();
+  mapPopup = new maplibregl.Popup({ offset: 12, maxWidth: '240px' })
+    .setLngLat(feature.geometry.coordinates).setDOMContent(node).addTo(map);
+}
+
 // PWA: Service Worker登録と、新バージョン検出時の自動リロード
-if ("serviceWorker" in navigator && location.protocol === "https:") {
-  navigator.serviceWorker.register("sw.js");
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js');
   let refreshed = false;
-  navigator.serviceWorker.addEventListener("controllerchange", () => {
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (refreshed) return;
     refreshed = true;
     location.reload();
