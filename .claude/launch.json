@@ -4,7 +4,7 @@
     {
       "name": "chomeme-map",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "C:\\Users\\takus\\OneDrive\\ドキュメント\\claude\\chomeme-map\\site"],
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "C:\\Users\\takus\\OneDrive\\ドキュメント\\claude\\chomeme-map\\docs"],
       "port": 8765,
       "autoPort": false
     }

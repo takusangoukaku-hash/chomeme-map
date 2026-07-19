@@ -106,6 +106,12 @@ def main():
                     need_meta.update(unfetched[:2])
                 shops.append(shop)
         else:
+            # metaは総集編の元動画解決や新着チェック用にも取得されるため、
+            # タイトルに「ちょめめ」がある動画だけを個別ソースとして採用する
+            # (文字起こし検出分は verified.json 経由で build_shops が反映する)
+            title = meta.get("title") or ""
+            if "ちょめめ" not in title and "チョメメ" not in title:
+                continue
             info = parse_shop_block(desc)
             if info:
                 shops.append({

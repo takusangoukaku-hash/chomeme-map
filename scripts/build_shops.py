@@ -78,12 +78,15 @@ def main():
 
     # 前回ビルドの added(初掲載日)を引き継ぐ
     prev_added = {}
+    prev_added_addr = {}  # 代表店名が変わっても住所で added を引き継げるように
     prev_file = SITE / "shops.json"
     if prev_file.exists():
         prev = json.loads(prev_file.read_text(encoding="utf-8"))
         prev_shops = prev if isinstance(prev, list) else prev.get("shops", [])
         for s in prev_shops:
             prev_added[norm(s["name"])] = s.get("added")
+            if s.get("address"):
+                prev_added_addr[norm(s["address"])[:14]] = s.get("added")
 
     # 表記が違いすぎて自動マージできない同一店舗の別名 (norm形で指定)
     aliases = {
@@ -182,9 +185,12 @@ def main():
         m["lng"] = latlng["lng"] if latlng else None
         m.pop("pref", None)
         k = norm(m["name"])
-        # 前回ファイルに存在した店は added を引き継ぐ(未設定なら旧掲載扱い)。
+        ka = norm(m["address"])[:14] if m.get("address") else None
+        # 前回ファイルに存在した店(店名または住所が一致)は added を引き継ぐ。
         # 新規の店だけが今日の日付になり、NEW表示される
-        m["added"] = prev_added.get(k) or ("20260101" if k in prev_added else time.strftime("%Y%m%d"))
+        known = k in prev_added or (ka and ka in prev_added_addr)
+        m["added"] = prev_added.get(k) or (ka and prev_added_addr.get(ka)) \
+            or ("20260101" if known else time.strftime("%Y%m%d"))
         out.append(m)
 
     SITE.mkdir(exist_ok=True)
