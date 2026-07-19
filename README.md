@@ -2,6 +2,11 @@
 
 SUSURU TV.(すするTV)が「ちょめめ」(=超美味い)と発言したラーメン店を地図にまとめるプロジェクト。
 
+- **公開URL**: https://takusangoukaku-hash.github.io/chomeme-map/ (GitHub Pages, main:/docs)
+- **PWA**: スマホでホーム画面に追加するとアプリとして起動できる。sw.jsのVERSIONとindex.htmlの?v=NNを揃えて更新すること
+- **自動更新**: 毎日21:30にスケジュールタスク(chomeme-map-daily-update)が scripts/update.py を実行し、
+  新着動画の判定→shops.json更新→git push(Pagesが自動再デプロイ)。新着店舗があればプッシュ通知が届く
+
 ## データソース(3系統)
 
 1. **タイトル**: 【ちょめめ】付き動画(約20本)→ 概要欄「【本日のお店】」から店名・住所
