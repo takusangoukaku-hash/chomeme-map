@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "chomeme-map",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "C:\\Users\\takus\\OneDrive\\ドキュメント\\claude\\chomeme-map\\site"],
+      "port": 8765,
+      "autoPort": false
+    }
+  ]
+}

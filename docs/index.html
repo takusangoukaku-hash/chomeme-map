@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ちょめめマップ — SUSURU TV.「ちょめめ」発言店舗まとめ</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c8382e">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  html, body { height: 100%; margin: 0; font-family: "Hiragino Sans", "Yu Gothic", sans-serif; }
+  #app { display: flex; flex-direction: column; height: 100%; }
+  header {
+    background: #c8382e; color: #fff; padding: 8px 14px;
+    padding-top: calc(8px + env(safe-area-inset-top));
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  }
+  header h1 { margin: 0; font-size: 1.1rem; }
+  header .sub { font-size: .75rem; opacity: .9; }
+  #map { flex: 1; }
+  .popup { width: 230px; }
+  .popup img { width: 100%; border-radius: 6px; display: block; }
+  .popup .shop { font-weight: 700; margin: 6px 0 2px; font-size: .95rem; }
+  .popup .addr { font-size: .72rem; color: #555; margin-bottom: 4px; }
+  .popup a.vid { display: block; font-size: .8rem; margin-top: 4px; text-decoration: none; color: #1a0dab; }
+  .popup .badge {
+    display: inline-block; background: #c8382e; color: #fff; border-radius: 4px;
+    font-size: .65rem; padding: 1px 5px; margin-right: 4px; vertical-align: middle;
+  }
+  .popup .badge.new { background: #1a9c46; }
+  .count { font-size: .75rem; }
+  .updated { font-size: .68rem; opacity: .8; margin-left: auto; }
+  .marker-new { filter: hue-rotate(230deg) saturate(1.6); }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🍜 ちょめめマップ</h1>
+    <span class="sub">SUSURU TV.が「ちょめめ」(超美味い)と言ったラーメン店を地図に</span>
+    <span class="count" id="count"></span>
+    <span class="updated" id="updated"></span>
+  </header>
+  <div id="map"></div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map = L.map("map").setView([35.68, 139.76], 6);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  maxZoom: 19,
+}).addTo(map);
+
+function fmtTime(sec) {
+  if (sec == null) return "";
+  const m = Math.floor(sec / 60), s = Math.floor(sec % 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+const NEW_DAYS = 14;
+function isNew(added) {
+  if (!added) return false;
+  const d = new Date(`${added.slice(0,4)}-${added.slice(4,6)}-${added.slice(6,8)}`);
+  return (Date.now() - d.getTime()) < NEW_DAYS * 86400e3;
+}
+
+const srcBadge = {
+  transcript: (v) => `<span class="badge">🎙 ${fmtTime(v.t)}</span>`,
+  compilation: (v) => `<span class="badge">📀 総集編 ${fmtTime(v.t)}</span>`,
+  title: () => `<span class="badge">📺</span>`,
+};
+
+fetch("shops.json").then(r => r.json()).then(data => {
+  const shops = Array.isArray(data) ? data : data.shops;
+  if (data.updated) {
+    document.getElementById("updated").textContent =
+      `更新: ${new Date(data.updated).toLocaleDateString("ja-JP")}`;
+  }
+  document.getElementById("count").textContent = `${shops.length}店舗`;
+  const markers = [];
+  for (const shop of shops) {
+    if (shop.lat == null) continue;
+    const fresh = isNew(shop.added);
+    const v0 = shop.videos[0];
+    const vidLinks = shop.videos.map(v => {
+      const t = v.t != null ? `&t=${Math.max(0, Math.floor(v.t) - 5)}s` : "";
+      const badge = (srcBadge[v.source] || srcBadge.title)(v);
+      return `<a class="vid" href="https://www.youtube.com/watch?v=${v.id}${t}" target="_blank" rel="noopener">${badge}${v.title}</a>`;
+    }).join("");
+    const html = `
+      <div class="popup">
+        <a href="https://www.youtube.com/watch?v=${v0.id}" target="_blank" rel="noopener">
+          <img src="https://img.youtube.com/vi/${v0.id}/mqdefault.jpg" alt="" loading="lazy">
+        </a>
+        <div class="shop">${fresh ? '<span class="badge new">NEW</span>' : ""}${shop.name}</div>
+        <div class="addr">${shop.address ?? ""}</div>
+        ${vidLinks}
+      </div>`;
+    const m = L.marker([shop.lat, shop.lng]).addTo(map).bindPopup(html);
+    if (fresh) {
+      m.once("add", () => m.getElement()?.classList.add("marker-new"));
+      if (m.getElement()) m.getElement().classList.add("marker-new");
+    }
+    markers.push(m);
+  }
+  if (markers.length) {
+    const bounds = L.featureGroup(markers).getBounds().pad(0.1);
+    // 非表示状態でロードされるとコンテナサイズ0でfitBoundsがzoom 0になるため、
+    // サイズが確定してからfitする
+    const fit = () => {
+      map.invalidateSize();
+      const s = map.getSize();
+      if (s.x > 0 && s.y > 0) map.fitBounds(bounds);
+      else setTimeout(fit, 250);
+    };
+    fit();
+    window.addEventListener("resize", () => map.invalidateSize());
+  }
+});
+
+// PWA: Service Worker登録と、新バージョン検出時の自動リロード
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  navigator.serviceWorker.register("sw.js");
+  let refreshed = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (refreshed) return;
+    refreshed = true;
+    location.reload();
+  });
+}
+</script>
+</body>
+</html>

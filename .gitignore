@@ -1,0 +1,4 @@
+__pycache__/
+data/clips/
+data/transcripts/
+data/failed.json
