@@ -24,6 +24,7 @@
   .count { font-size: .75rem; }
   .updated { font-size: .68rem; opacity: .8; margin-left: auto; }
   #map-canvas { flex: 1; }
+  .pin { cursor: pointer; line-height: 0; filter: drop-shadow(0 1px 1px rgba(0,0,0,.3)); }
 
   /* ポップアップ（グルメアプリと同系統の見た目） */
   .maplibregl-popup-content {
@@ -200,13 +201,6 @@ const srcBadge = {
   title: () => `<span class="badge">📺</span>`,
 };
 
-// ピン/クラスターの大きさ（グルメアプリと同じ式）
-const PIN_RADIUS = ['interpolate', ['linear'], ['zoom'], 8, 1.5, 10, 1.8, 12, 3.6, 14, 5.4, 15, 6, 20, 6];
-const CSTEP = ['step', ['get', 'point_count'], 1, 10, 2, 30, 3];
-const CLUSTER_RADIUS = ['interpolate', ['linear'], ['zoom'],
-  8, ['+', 2, CSTEP], 10, ['+', 2.4, CSTEP], 12, ['+', 4.4, CSTEP],
-  14, ['+', 6.2, CSTEP], 15, ['+', 7, CSTEP], 20, ['+', 7, CSTEP]];
-
 const map = new maplibregl.Map({
   container: 'map-canvas',
   style: baseMapStyle(dark),
@@ -218,6 +212,21 @@ map.on('error', (e) => console.warn('MapLibre:', e && e.error));
 
 let mapPopup = null;
 
+// 前バージョン(Leaflet)と同じ「しずく型ピン」。ズームしても大きさが変わらない。
+// 新着店は緑、それ以外はちょめめレッド。
+function makePinEl(fresh) {
+  const color = fresh ? NEW_GREEN : CHOMEME_RED;
+  const el = document.createElement('div');
+  el.className = 'pin';
+  el.innerHTML =
+    `<svg width="26" height="36" viewBox="0 0 26 36" xmlns="http://www.w3.org/2000/svg">
+       <path d="M13 0.8C6.1 0.8 0.8 6.1 0.8 13c0 8.9 12.2 22 12.2 22S25.2 21.9 25.2 13C25.2 6.1 19.9 0.8 13 0.8z"
+             fill="${color}" stroke="#ffffff" stroke-width="1.6"/>
+       <circle cx="13" cy="13" r="4.7" fill="#ffffff"/>
+     </svg>`;
+  return el;
+}
+
 map.on('load', async () => {
   const res = await fetch('shops.json');
   const data = await res.json();
@@ -228,77 +237,28 @@ map.on('load', async () => {
   }
   document.getElementById('count').textContent = `${shops.length}店舗`;
 
-  const features = [];
   const bounds = new maplibregl.LngLatBounds();
+  let any = false;
   for (const shop of shops) {
     if (shop.lat == null) continue;
-    features.push({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [shop.lng, shop.lat] },
-      properties: {
-        name: shop.name,
-        fresh: isNew(shop.added) ? 1 : 0,
-        shop: JSON.stringify(shop),
-      },
+    const fresh = isNew(shop.added);
+    const el = makePinEl(fresh);
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openShopPopup(shop, [shop.lng, shop.lat]);
     });
+    new maplibregl.Marker({ element: el, anchor: 'bottom' })
+      .setLngLat([shop.lng, shop.lat]).addTo(map);
     bounds.extend([shop.lng, shop.lat]);
+    any = true;
   }
 
-  map.addSource('shops', {
-    type: 'geojson',
-    data: { type: 'FeatureCollection', features },
-    cluster: true, clusterMaxZoom: 11, clusterRadius: 40,
-    clusterProperties: { anyNew: ['max', ['get', 'fresh']] },
-  });
-
-  // クラスター（新着を含むと緑、それ以外は赤）
-  map.addLayer({ id: 'clusters', type: 'circle', source: 'shops',
-    filter: ['has', 'point_count'],
-    paint: {
-      'circle-color': ['case', ['==', ['get', 'anyNew'], 1], NEW_GREEN, CHOMEME_RED],
-      'circle-radius': CLUSTER_RADIUS,
-      'circle-stroke-color': '#fff',
-      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11, 0, 12, 1],
-    } });
-  // 個別ピン
-  map.addLayer({ id: 'pins', type: 'circle', source: 'shops',
-    filter: ['!', ['has', 'point_count']],
-    paint: {
-      'circle-color': ['case', ['==', ['get', 'fresh'], 1], NEW_GREEN, CHOMEME_RED],
-      'circle-radius': PIN_RADIUS,
-      'circle-stroke-color': '#ffffff',
-      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11, 1.2, 12, 2],
-    } });
-  // 店名ラベル（z12以上）
-  map.addLayer({ id: 'pin-labels', type: 'symbol', source: 'shops', minzoom: 12,
-    filter: ['!', ['has', 'point_count']],
-    layout: {
-      'text-field': ['get', 'name'], 'text-font': FONT, 'text-size': 10,
-      'text-anchor': 'bottom', 'text-offset': [0, -0.9], 'text-max-width': 12,
-    },
-    paint: {
-      'text-color': dark ? '#e8e6e1' : '#3a3833',
-      'text-halo-color': dark ? '#1a1b1f' : '#ffffff', 'text-halo-width': 1.2,
-    } });
-
-  map.on('click', 'pins', (e) => openShopPopup(e.features[0]));
-  map.on('click', 'clusters', (e) => {
-    const f = e.features[0];
-    map.getSource('shops').getClusterExpansionZoom(f.properties.cluster_id)
-      .then(z => map.easeTo({ center: f.geometry.coordinates, zoom: z }));
-  });
-  ['pins', 'clusters'].forEach(id => {
-    map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; });
-    map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; });
-  });
-
-  if (features.length) {
+  if (any) {
     map.fitBounds(bounds, { padding: 40, maxZoom: 12, duration: 0 });
   }
 });
 
-function openShopPopup(feature) {
-  const shop = JSON.parse(feature.properties.shop);
+function openShopPopup(shop, lngLat) {
   const fresh = isNew(shop.added);
   const v0 = shop.videos[0];
   const vidLinks = shop.videos.map(v => {
@@ -316,8 +276,8 @@ function openShopPopup(feature) {
     <div class="addr">${shop.address ?? ''}</div>
     ${vidLinks}`;
   if (mapPopup) mapPopup.remove();
-  mapPopup = new maplibregl.Popup({ offset: 12, maxWidth: '240px' })
-    .setLngLat(feature.geometry.coordinates).setDOMContent(node).addTo(map);
+  mapPopup = new maplibregl.Popup({ offset: 30, maxWidth: '240px' })
+    .setLngLat(lngLat).setDOMContent(node).addTo(map);
 }
 
 // PWA: Service Worker登録と、新バージョン検出時の自動リロード
