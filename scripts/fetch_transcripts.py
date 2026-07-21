@@ -69,22 +69,27 @@ def main():
         except (IpBlocked, RequestBlocked):
             blocks += 1
             if blocks > args.max_blocks:
-                print("too many blocks, giving up this run", flush=True)
-                sys.exit(2)
+                # IPブロックは想定内。今日の分はここまでとして正常終了する
+                # (異常終了にすると呼び出し側のパイプラインが止まってしまう)
+                print("too many blocks, ending this run normally", flush=True)
+                break
             print(f"BLOCKED (#{blocks}) waiting {args.block_wait}s ...", flush=True)
             time.sleep(args.block_wait)
             api = YouTubeTranscriptApi()
             continue  # 同じ動画をリトライ
         except Exception as e:
+            # 想定外のエラーも1本スキップして続行(1本の不具合で全体を止めない)
             print(f"ERROR {vid} {type(e).__name__}: {e}", flush=True)
-            print("aborting run", flush=True)
-            sys.exit(2)
+            failed[vid] = type(e).__name__
+            FAILED.write_text(json.dumps(failed, ensure_ascii=False, indent=1), encoding="utf-8")
         i += 1
         done += 1
         time.sleep(args.delay + random.uniform(0, args.delay * 0.5))
 
     total = len(list(TDIR.glob("*.json")))
-    print(f"done this run: {done}, total transcripts: {total}, failed: {len(failed)}")
+    remaining = len(videos) - total - len(failed)
+    print(f"done this run: {done}, total transcripts: {total}, "
+          f"failed: {len(failed)}, remaining: {remaining}")
 
 
 if __name__ == "__main__":

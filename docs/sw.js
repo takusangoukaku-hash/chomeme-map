@@ -1,12 +1,12 @@
 // ちょめめマップ Service Worker
 // バージョン更新時は VERSION と index.html の ?v=NN を揃えて上げること
-const VERSION = "v3";
+const VERSION = "v4";
 const SHELL_CACHE = `chomeme-shell-${VERSION}`;
 const DATA_CACHE = "chomeme-data";
 
 const SHELL = [
   "./",
-  `./index.html?v=3`,
+  `./index.html?v=4`,
   "./manifest.json",
   "./icon-192.png",
   "https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css",

@@ -232,8 +232,11 @@ map.on('load', async () => {
   const data = await res.json();
   const shops = Array.isArray(data) ? data : data.shops;
   if (data.updated) {
+    const p = data.progress;
+    // 全動画の文字起こし解析は長期戦なので、更新日と一緒に進捗も出す
+    const prog = p ? `　字幕解析 ${p.scanned.toLocaleString()}/${p.videos.toLocaleString()}` : '';
     document.getElementById('updated').textContent =
-      `更新: ${new Date(data.updated).toLocaleDateString('ja-JP')}`;
+      `更新: ${new Date(data.updated).toLocaleDateString('ja-JP')}${prog}`;
   }
   document.getElementById('count').textContent = `${shops.length}店舗`;
 

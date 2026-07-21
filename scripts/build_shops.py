@@ -193,9 +193,17 @@ def main():
             or ("20260101" if known else time.strftime("%Y%m%d"))
         out.append(m)
 
+    # 字幕解析の進捗(全動画のうち何本を文字起こしで確認済みか)
+    videos_total = len(json.loads((DATA / "videos.json").read_text(encoding="utf-8")))
+    scanned = len(list((DATA / "transcripts").glob("*.json")))
+    ffile = DATA / "failed.json"
+    if ffile.exists():
+        scanned += len(json.loads(ffile.read_text(encoding="utf-8")))
+
     SITE.mkdir(exist_ok=True)
     payload = {
         "updated": time.strftime("%Y-%m-%dT%H:%M:%S+09:00"),
+        "progress": {"scanned": scanned, "videos": videos_total},
         "shops": out,
     }
     (SITE / "shops.json").write_text(

@@ -4,5 +4,10 @@
   "t": 12.0,
   "whisper": "ズルズル!どうも!スースルです。2023年も残りわずか、今年も毎日ラーメンをすすることがあっていきました。そして今回は年末のすするまとめ。すするが特に美味しいラーメンをすすった時に発することは、ちょめめ!そんなちょめめが出た今年のラーメンをまとめてみました。それでは2023年ちょめめまとめ、レッツゴー!",
   "verified": true
+ },
+ {
+  "id": "iUNw2OkCOLE",
+  "t": 963.2,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*951.2-975.2', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\iUNw2OkCOLE_963.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=iUNw2OkCOLE']' timed out after 300.0 seconds"
  }
 ]

@@ -98,8 +98,20 @@ def shop_names(payload):
     return {s["name"] for s in shops}
 
 
+def argval(name, default):
+    """--name VALUE 形式の引数を読む"""
+    if name in sys.argv:
+        i = sys.argv.index(name)
+        if i + 1 < len(sys.argv):
+            return int(sys.argv[i + 1])
+    return default
+
+
 def main():
     push = "--no-push" not in sys.argv
+    # 1回の実行で消化する字幕の本数と、IPブロック待機の許容回数
+    backfill = argval("--backfill", 200)
+    max_blocks = argval("--max-blocks", 8)
 
     before = json.loads((DOCS / "shops.json").read_text(encoding="utf-8"))
 
@@ -108,7 +120,7 @@ def main():
 
     # 新着動画のメタデータ(タイトルちょめめ判定と店舗情報の両方に使う)
     if new_videos:
-        run("fetch_meta.py", *[v["id"] for v in new_videos])
+        run("fetch_meta.py", *[v["id"] for v in new_videos], check=False)
         fetch_new_transcripts([v["id"] for v in new_videos])
 
     # 直近3日以内に「字幕なし」で失敗記録された動画は記録を消して再試行対象に戻す
@@ -121,26 +133,36 @@ def main():
         if pruned != failed:
             ffile.write_text(json.dumps(pruned, ensure_ascii=False, indent=1), encoding="utf-8")
 
-    # 字幕から候補検索 → Whisper検証 → 店舗再抽出 → ビルド
-    run("search_chomeme.py")
-    run("verify_whisper.py", "--hits")
+    # 字幕バックログの消化(全4000本超は長期戦。IPブロックしたらその日は打ち切り)
+    if backfill > 0:
+        run("fetch_transcripts.py", "--limit", str(backfill),
+            "--delay", "15", "--max-blocks", str(max_blocks), check=False)
 
-    # 検証済みヒットの動画メタが無ければ取得(build_shopsが店舗情報に使う)
-    vfile = DATA / "verified.json"
-    if vfile.exists():
-        need = [r["id"] for r in json.loads(vfile.read_text(encoding="utf-8"))
-                if r.get("verified") and not (DATA / "meta" / f"{r['id']}.json").exists()]
-        if need:
-            run("fetch_meta.py", *sorted(set(need)))
+    # ここから先は途中で失敗しても最後のビルド＋コミットまで必ず到達させる
+    # (1ステップの失敗で更新が丸ごと止まると、進捗が見えなくなるため)
+    try:
+        run("search_chomeme.py", check=False)
+        run("verify_whisper.py", "--hits", check=False)
 
-    run("fetch_meta.py", "--title-hits")
-    run("extract_shops.py")
-    nm = DATA / "need_meta.json"
-    if nm.exists():
-        ids = json.loads(nm.read_text(encoding="utf-8"))
-        if ids:
-            run("fetch_meta.py", *ids)
-            run("extract_shops.py")
+        # 検証済みヒットの動画メタが無ければ取得(build_shopsが店舗情報に使う)
+        vfile = DATA / "verified.json"
+        if vfile.exists():
+            need = [r["id"] for r in json.loads(vfile.read_text(encoding="utf-8"))
+                    if r.get("verified") and not (DATA / "meta" / f"{r['id']}.json").exists()]
+            if need:
+                run("fetch_meta.py", *sorted(set(need)), check=False)
+
+        run("fetch_meta.py", "--title-hits", check=False)
+        run("extract_shops.py", check=False)
+        nm = DATA / "need_meta.json"
+        if nm.exists():
+            ids = json.loads(nm.read_text(encoding="utf-8"))
+            if ids:
+                run("fetch_meta.py", *ids, check=False)
+                run("extract_shops.py", check=False)
+    except Exception as e:
+        print(f"gathering phase error (continuing to build): {type(e).__name__}: {e}")
+
     run("build_shops.py")
 
     after = json.loads((DOCS / "shops.json").read_text(encoding="utf-8"))
@@ -157,6 +179,7 @@ def main():
         "new_videos": [v["title"] for v in new_videos],
         "new_shops": new_shops,
         "total_shops": len(shop_names(after)),
+        "progress": after.get("progress"),
         "pushed": changed and push,
     }
     print("SUMMARY: " + json.dumps(summary, ensure_ascii=False))
