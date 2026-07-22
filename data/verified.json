@@ -9,5 +9,106 @@
   "id": "iUNw2OkCOLE",
   "t": 963.2,
   "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*951.2-975.2', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\iUNw2OkCOLE_963.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=iUNw2OkCOLE']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "vRtZLrzV4b8",
+  "t": 0.1,
+  "whisper": "僕のもう、ちょめめを出したいと。狙って、どうこうしてる人もダメなんですよ。スズルTV!ズル、ズル!ぽっとー!スズルです!毎日ラーメン健康生活ということで、相変わらずやってるんですけれども",
+  "verified": true
+ },
+ {
+  "id": "vRtZLrzV4b8",
+  "t": 79.6,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*67.6-91.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\vRtZLrzV4b8_79.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=vRtZLrzV4b8']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "vRtZLrzV4b8",
+  "t": 85.0,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*73.0-97.0', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\vRtZLrzV4b8_85.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=vRtZLrzV4b8']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "vRtZLrzV4b8",
+  "t": 86.4,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*74.4-98.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\vRtZLrzV4b8_86.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=vRtZLrzV4b8']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 608.4,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*596.4-620.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_608.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 616.7,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*604.7-628.7', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_616.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 624.4,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*612.4-636.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_624.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 626.2,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*614.2-638.2', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_626.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 640.0,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*628.0-652.0', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_640.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 641.7,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*629.7-653.7', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_641.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 643.0,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*631.0-655.0', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_643.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 650.1,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*638.1-662.1', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_650.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 651.9,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*639.9-663.9', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_651.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 654.1,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*642.1-666.1', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_654.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 656.7,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*644.7-668.7', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_656.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 671.0,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*659.0-683.0', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_671.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 680.6,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*668.6-692.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_680.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 682.0,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*670.0-694.0', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_682.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 683.6,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*671.6-695.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_683.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "WQmaiyubeqQ",
+  "t": 684.6,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*672.6-696.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_684.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
  }
 ]
