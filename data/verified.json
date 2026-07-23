@@ -6,15 +6,20 @@
   "verified": true
  },
  {
-  "id": "iUNw2OkCOLE",
-  "t": 963.2,
-  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*951.2-975.2', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\iUNw2OkCOLE_963.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=iUNw2OkCOLE']' timed out after 300.0 seconds"
- },
- {
   "id": "vRtZLrzV4b8",
   "t": 0.1,
   "whisper": "僕のもう、ちょめめを出したいと。狙って、どうこうしてる人もダメなんですよ。スズルTV!ズル、ズル!ぽっとー!スズルです!毎日ラーメン健康生活ということで、相変わらずやってるんですけれども",
   "verified": true
+ },
+ {
+  "id": "gNUnuy8WP9o",
+  "t": 645.6,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*633.6-657.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\gNUnuy8WP9o_645.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=gNUnuy8WP9o']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "iUNw2OkCOLE",
+  "t": 963.2,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*951.2-975.2', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\iUNw2OkCOLE_963.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=iUNw2OkCOLE']' timed out after 300.0 seconds"
  },
  {
   "id": "vRtZLrzV4b8",
@@ -30,6 +35,16 @@
   "id": "vRtZLrzV4b8",
   "t": 86.4,
   "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*74.4-98.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\vRtZLrzV4b8_86.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=vRtZLrzV4b8']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "vuhppul1Myo",
+  "t": 996.8,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*984.8-1008.8', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\vuhppul1Myo_996.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=vuhppul1Myo']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "vuhppul1Myo",
+  "t": 998.5,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*986.5-1010.5', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\vuhppul1Myo_998.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=vuhppul1Myo']' timed out after 300.0 seconds"
  },
  {
   "id": "WQmaiyubeqQ",
@@ -99,7 +114,7 @@
  {
   "id": "WQmaiyubeqQ",
   "t": 682.0,
-  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*670.0-694.0', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_682.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+  "error": "CalledProcessError: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*670.0-694.0', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_682.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' returned non-zero exit status 1."
  },
  {
   "id": "WQmaiyubeqQ",
