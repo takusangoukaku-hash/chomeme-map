@@ -52,6 +52,11 @@
   "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*986.5-1010.5', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\vuhppul1Myo_998.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=vuhppul1Myo']' timed out after 300.0 seconds"
  },
  {
+  "id": "w_e5AOb9oo4",
+  "t": 132.8,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*120.80000000000001-144.8', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\w_e5AOb9oo4_132.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=w_e5AOb9oo4']' timed out after 300.0 seconds"
+ },
+ {
   "id": "WQmaiyubeqQ",
   "t": 608.4,
   "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*596.4-620.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_608.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
@@ -104,7 +109,7 @@
  {
   "id": "WQmaiyubeqQ",
   "t": 656.7,
-  "error": "CalledProcessError: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*644.7-668.7', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_656.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' returned non-zero exit status 1."
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*644.7-668.7', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_656.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
  },
  {
   "id": "WQmaiyubeqQ",
@@ -119,7 +124,7 @@
  {
   "id": "WQmaiyubeqQ",
   "t": 682.0,
-  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*670.0-694.0', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_682.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+  "error": "CalledProcessError: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*670.0-694.0', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_682.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' returned non-zero exit status 1."
  },
  {
   "id": "WQmaiyubeqQ",
