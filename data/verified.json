@@ -27,9 +27,34 @@
   "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*731.2-755.2', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\2uBbcA626vQ_743.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=2uBbcA626vQ']' timed out after 300.0 seconds"
  },
  {
+  "id": "8U1JAa5ACa8",
+  "t": 824.8,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*812.8-836.8', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\8U1JAa5ACa8_824.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=8U1JAa5ACa8']' timed out after 300.0 seconds"
+ },
+ {
   "id": "A96TrA66CrM",
   "t": 397.4,
-  "error": "CalledProcessError: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*385.4-409.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\A96TrA66CrM_397.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=A96TrA66CrM']' returned non-zero exit status 1."
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*385.4-409.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\A96TrA66CrM_397.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=A96TrA66CrM']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "AqixKvK67rk",
+  "t": 230.1,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*218.1-242.1', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\AqixKvK67rk_230.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=AqixKvK67rk']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "AqixKvK67rk",
+  "t": 395.6,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*383.6-407.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\AqixKvK67rk_395.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=AqixKvK67rk']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "AqixKvK67rk",
+  "t": 401.1,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*389.1-413.1', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\AqixKvK67rk_401.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=AqixKvK67rk']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "AqixKvK67rk",
+  "t": 402.1,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*390.1-414.1', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\AqixKvK67rk_402.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=AqixKvK67rk']' timed out after 300.0 seconds"
  },
  {
   "id": "disv2G9AZAM",
@@ -39,7 +64,7 @@
  {
   "id": "gNUnuy8WP9o",
   "t": 645.6,
-  "error": "CalledProcessError: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*633.6-657.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\gNUnuy8WP9o_645.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=gNUnuy8WP9o']' returned non-zero exit status 1."
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*633.6-657.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\gNUnuy8WP9o_645.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=gNUnuy8WP9o']' timed out after 300.0 seconds"
  },
  {
   "id": "iUNw2OkCOLE",
@@ -55,6 +80,11 @@
   "id": "kH1V2tS0fXk",
   "t": 1595.3,
   "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*1583.3-1607.3', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\kH1V2tS0fXk_1595.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=kH1V2tS0fXk']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "LSiGI-lDxNU",
+  "t": 11282.4,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*11270.4-11294.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\LSiGI-lDxNU_11282.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=LSiGI-lDxNU']' timed out after 300.0 seconds"
  },
  {
   "id": "OPow9gKGIsg",
@@ -74,7 +104,7 @@
  {
   "id": "vRtZLrzV4b8",
   "t": 85.0,
-  "error": "RuntimeError: Failed to load audio: ffmpeg version 8.1.2-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers\r\n  built with gcc 16.1.0 (Rev2, Built by MSYS2 project)\r\n  configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect --enable-cairo --enable-fontconfig --enable-iconv --enable-gnutls --enable-lcms2 --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma --enable-libsnappy --enable-zlib --enable-librist --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-libbluray --enable-libcaca --enable-libdvdnav --enable-libdvdread --enable-sdl2 --enable-libaribb24 --enable-libaribcaption --enable-libdav1d --enable-libdavs2 --enable-libopenjpeg --enable-libquirc --enable-libuavs3d --enable-libxevd --enable-libzvbi --enable-liboapv --enable-libqrencode --enable-librav1e --enable-libsvtav1 --enable-libvvenc --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxeve --enable-libxvid --enable-libaom --enable-libjxl --enable-libsvtjpegxs --enable-libvpx --enable-mediafoundation --enable-libass --enable-frei0r --enable-libfreetype --enable-libfribidi --enable-libharfbuzz --enable-liblensfun --enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-dxva2 --enable-d3d11va --enable-d3d12va --enable-ffnvcodec --enable-libvpl --enable-nvdec --enable-nvenc --enable-vaapi --enable-libshaderc --enable-vulkan --enable-libplacebo --enable-opencl --enable-libcdio --enable-openal --enable-libgme --enable-libmodplug --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libshine --enable-libtheora --enable-libtwolame --enable-libvo-amrwbenc --enable-libcodec2 --enable-libilbc --enable-libgsm --enable-liblc3 --enable-libopencore-amrnb --enable-libopus --enable-libspeex --enable-libvorbis --enable-ladspa --enable-libbs2b --enable-libflite --enable-libmysofa --enable-librubberband --enable-libsoxr --enable-chromaprint --enable-whisper\r\n  libavutil      60. 26.102 / 60. 26.102\r\n  libavcodec     62. 28.102 / 62. 28.102\r\n  libavformat    62. 12.102 / 62. 12.102\r\n  libavdevice    62.  3.102 / 62.  3.102\r\n  libavfilter    11. 14.102 / 11. 14.102\r\n  libswscale      9.  5.102 /  9.  5.102\r\n  libswresample   6.  3.102 /  6.  3.102\r\n[aac @ 0000025e06d48380] decode_band_types: Input buffer exhausted before END element found\r\nInput #0, mov,mp4,m4a,3gp,3g2,mj2, from 'C:\\Users\\takus\\OneDrive\\ドキュメント\\claude\\chomeme-map\\data\\clips\\vRtZLrzV4b8_85.m4a':\r\n  Metadata:\r\n    major_brand     : M4A \r\n    minor_version   : 512\r\n    compatible_brands: M4A isomiso2\r\n    encoder         : Lavf62.12.102\r\n  Duration: 00:00:00.77, start: 0.000000, bitrate: 138 kb/s\r\n  Stream #0:0[0x1](eng): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 128 kb/s (default)\r\n    Metadata:\r\n      handler_name    : ISO Media file produced by Google Inc.\r\nStream mapping:\r\n  Stream #0:0 -> #0:0 (aac (native) -> pcm_s16le (native))\r\n[aac @ 0000025e06d4d580] decode_band_types: Input buffer exhausted before END element found\r\n[aist#0:0/aac @ 0000025e06d73f80] [dec:aac @ 0000025e06d4d000] Error submitting packet to decoder: Invalid data found when processing input\r\n[aist#0:0/aac @ 0000025e06d73f80] [dec:aac @ 0000025e06d4d000] Decode error rate 1 exceeds maximum 0.666667\r\n[aist#0:0/aac @ 0000025e06d73f80] [dec:aac @ 0000025e06d4d000] Task finished with error code: -1145393733 (Error number -1145393733 occurred)\r\n[aist#0:0/aac @ 0000025e06d73f80] [dec:aac @ 0000025e06d4d000] Terminating thread with return code -1145393733 (Error number -1145393733 occurred)\r\n[af#0:0 @ 0000025e06d4c9c0] No filtered frames for output stream, trying to initialize anyway.\r\nOutput #0, s16le, to 'pipe:':\r\n  Metadata:\r\n    major_brand     : M4A \r\n    minor_version   : 512\r\n    compatible_brands: M4A isomiso2\r\n    encoder         : Lavf62.12.102\r\n  Stream #0:0(eng): Audio: pcm_s16le, 16000 Hz, mono, s16, 256 kb/s (default)\r\n    Metadata:\r\n      encoder         : Lavc62.28.102 pcm_s16le\r\n      handler_name    : ISO Media file produced by Google Inc.\r\n[out#0/s16le @ 0000025e06cd0000] video:0KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\r\n[out#0/s16le @ 0000025e06cd0000] Output file is empty, nothing was encoded(check -ss / -t / -frames parameters if used)\r\nsize=       0KiB time=N/A bitrate=N/A speed=N/A elapsed=0:00:00.00    \r\nConversion failed!\r\n"
+  "error": "RuntimeError: Failed to load audio: ffmpeg version 8.1.2-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers\r\n  built with gcc 16.1.0 (Rev2, Built by MSYS2 project)\r\n  configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect --enable-cairo --enable-fontconfig --enable-iconv --enable-gnutls --enable-lcms2 --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma --enable-libsnappy --enable-zlib --enable-librist --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-libbluray --enable-libcaca --enable-libdvdnav --enable-libdvdread --enable-sdl2 --enable-libaribb24 --enable-libaribcaption --enable-libdav1d --enable-libdavs2 --enable-libopenjpeg --enable-libquirc --enable-libuavs3d --enable-libxevd --enable-libzvbi --enable-liboapv --enable-libqrencode --enable-librav1e --enable-libsvtav1 --enable-libvvenc --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxeve --enable-libxvid --enable-libaom --enable-libjxl --enable-libsvtjpegxs --enable-libvpx --enable-mediafoundation --enable-libass --enable-frei0r --enable-libfreetype --enable-libfribidi --enable-libharfbuzz --enable-liblensfun --enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-dxva2 --enable-d3d11va --enable-d3d12va --enable-ffnvcodec --enable-libvpl --enable-nvdec --enable-nvenc --enable-vaapi --enable-libshaderc --enable-vulkan --enable-libplacebo --enable-opencl --enable-libcdio --enable-openal --enable-libgme --enable-libmodplug --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libshine --enable-libtheora --enable-libtwolame --enable-libvo-amrwbenc --enable-libcodec2 --enable-libilbc --enable-libgsm --enable-liblc3 --enable-libopencore-amrnb --enable-libopus --enable-libspeex --enable-libvorbis --enable-ladspa --enable-libbs2b --enable-libflite --enable-libmysofa --enable-librubberband --enable-libsoxr --enable-chromaprint --enable-whisper\r\n  libavutil      60. 26.102 / 60. 26.102\r\n  libavcodec     62. 28.102 / 62. 28.102\r\n  libavformat    62. 12.102 / 62. 12.102\r\n  libavdevice    62.  3.102 / 62.  3.102\r\n  libavfilter    11. 14.102 / 11. 14.102\r\n  libswscale      9.  5.102 /  9.  5.102\r\n  libswresample   6.  3.102 /  6.  3.102\r\n[aac @ 000002a38d976480] decode_band_types: Input buffer exhausted before END element found\r\nInput #0, mov,mp4,m4a,3gp,3g2,mj2, from 'C:\\Users\\takus\\OneDrive\\ドキュメント\\claude\\chomeme-map\\data\\clips\\vRtZLrzV4b8_85.m4a':\r\n  Metadata:\r\n    major_brand     : M4A \r\n    minor_version   : 512\r\n    compatible_brands: M4A isomiso2\r\n    encoder         : Lavf62.12.102\r\n  Duration: 00:00:00.77, start: 0.000000, bitrate: 138 kb/s\r\n  Stream #0:0[0x1](eng): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 128 kb/s (default)\r\n    Metadata:\r\n      handler_name    : ISO Media file produced by Google Inc.\r\nStream mapping:\r\n  Stream #0:0 -> #0:0 (aac (native) -> pcm_s16le (native))\r\n[aac @ 000002a38d9a6880] decode_band_types: Input buffer exhausted before END element found\r\n[aist#0:0/aac @ 000002a38d9a2180] [dec:aac @ 000002a38d9a62c0] Error submitting packet to decoder: Invalid data found when processing input\r\n[aist#0:0/aac @ 000002a38d9a2180] [dec:aac @ 000002a38d9a62c0] Decode error rate 1 exceeds maximum 0.666667\r\n[aist#0:0/aac @ 000002a38d9a2180] [dec:aac @ 000002a38d9a62c0] Task finished with error code: -1145393733 (Error number -1145393733 occurred)\r\n[aist#0:0/aac @ 000002a38d9a2180] [dec:aac @ 000002a38d9a62c0] Terminating thread with return code -1145393733 (Error number -1145393733 occurred)\r\n[af#0:0 @ 000002a38d9a5c80] No filtered frames for output stream, trying to initialize anyway.\r\nOutput #0, s16le, to 'pipe:':\r\n  Metadata:\r\n    major_brand     : M4A \r\n    minor_version   : 512\r\n    compatible_brands: M4A isomiso2\r\n    encoder         : Lavf62.12.102\r\n  Stream #0:0(eng): Audio: pcm_s16le, 16000 Hz, mono, s16, 256 kb/s (default)\r\n    Metadata:\r\n      encoder         : Lavc62.28.102 pcm_s16le\r\n      handler_name    : ISO Media file produced by Google Inc.\r\n[out#0/s16le @ 000002a38d901040] video:0KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\r\n[out#0/s16le @ 000002a38d901040] Output file is empty, nothing was encoded(check -ss / -t / -frames parameters if used)\r\nsize=       0KiB time=N/A bitrate=N/A speed=N/A elapsed=0:00:00.00    \r\nConversion failed!\r\n"
  },
  {
   "id": "vRtZLrzV4b8",
@@ -94,7 +124,7 @@
  {
   "id": "w_e5AOb9oo4",
   "t": 132.8,
-  "error": "CalledProcessError: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*120.80000000000001-144.8', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\w_e5AOb9oo4_132.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=w_e5AOb9oo4']' returned non-zero exit status 1."
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*120.80000000000001-144.8', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\w_e5AOb9oo4_132.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=w_e5AOb9oo4']' timed out after 300.0 seconds"
  },
  {
   "id": "WfG8iVTsYZE",
@@ -114,7 +144,7 @@
  {
   "id": "WQmaiyubeqQ",
   "t": 608.4,
-  "error": "CalledProcessError: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*596.4-620.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_608.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' returned non-zero exit status 1."
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*596.4-620.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_608.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
  },
  {
   "id": "WQmaiyubeqQ",
@@ -184,11 +214,41 @@
  {
   "id": "WQmaiyubeqQ",
   "t": 683.6,
-  "error": "CalledProcessError: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*671.6-695.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_683.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' returned non-zero exit status 1."
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*671.6-695.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_683.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
  },
  {
   "id": "WQmaiyubeqQ",
   "t": 684.6,
   "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*672.6-696.6', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\WQmaiyubeqQ_684.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=WQmaiyubeqQ']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "yG9VvqzFU8U",
+  "t": 10469.5,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*10457.5-10481.5', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\yG9VvqzFU8U_10469.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=yG9VvqzFU8U']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "yG9VvqzFU8U",
+  "t": 10486.7,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*10474.7-10498.7', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\yG9VvqzFU8U_10486.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=yG9VvqzFU8U']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "yG9VvqzFU8U",
+  "t": 10652.5,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*10640.5-10664.5', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\yG9VvqzFU8U_10652.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=yG9VvqzFU8U']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "yG9VvqzFU8U",
+  "t": 10657.7,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*10645.7-10669.7', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\yG9VvqzFU8U_10657.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=yG9VvqzFU8U']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "yG9VvqzFU8U",
+  "t": 10658.7,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*10646.7-10670.7', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\yG9VvqzFU8U_10658.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=yG9VvqzFU8U']' timed out after 300.0 seconds"
+ },
+ {
+  "id": "yG9VvqzFU8U",
+  "t": 10725.4,
+  "error": "TimeoutExpired: Command '['C:\\\\Users\\\\takus\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\python.exe', '-m', 'yt_dlp', '-f', 'bestaudio[ext=m4a]/bestaudio', '--download-sections', '*10713.4-10737.4', '-o', 'C:\\\\Users\\\\takus\\\\OneDrive\\\\ドキュメント\\\\claude\\\\chomeme-map\\\\data\\\\clips\\\\yG9VvqzFU8U_10725.m4a', '--quiet', '--no-warnings', 'https://www.youtube.com/watch?v=yG9VvqzFU8U']' timed out after 300.0 seconds"
  }
 ]
