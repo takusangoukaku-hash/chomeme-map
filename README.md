@@ -4,8 +4,13 @@ SUSURU TV.(すするTV)が「ちょめめ」(=超美味い)と発言したラー
 
 - **公開URL**: https://takusangoukaku-hash.github.io/chomeme-map/ (GitHub Pages, main:/docs)
 - **PWA**: スマホでホーム画面に追加するとアプリとして起動できる。sw.jsのVERSIONとindex.htmlの?v=NNを揃えて更新すること
-- **自動更新**: 毎日21:30にスケジュールタスク(chomeme-map-daily-update)が scripts/update.py を実行し、
-  新着動画の判定→shops.json更新→git push(Pagesが自動再デプロイ)。新着店舗があればプッシュ通知が届く
+- **自動更新**: 毎日21:30に **Windowsタスクスケジューラ**のタスク `chomeme-map-daily-update` が
+  `pythonw scripts/run_update.py`(画面を出さず scripts/update.py を実行、ログは data/update.log)を起動し、
+  新着動画の判定→shops.json更新→git push(Pagesが自動再デプロイ)。PCが21:30に起動していなければ次回起動時に自動で追いつく
+  (StartWhenAvailable)。実行結果は data/last_run.json、未通知の新着店舗は data/pending_notify.json に残る
+- **通知**: Claudeのスケジュールタスク(同名)は実行そのものは行わず、`scripts/wait_update.py` で更新の完了を待って
+  新着店舗をプッシュ通知するだけ。もし21:30の更新がまだ始まっていなければ保険としてタスクスケジューラを起動する。
+  Claudeアプリが閉じていて通知タスクが動かなかった日の新着は pending_notify.json に溜まり、次に動いた日にまとめて通知される
 
 ## データソース(3系統)
 

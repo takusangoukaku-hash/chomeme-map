@@ -7,7 +7,10 @@
 4. shops.json を再ビルド
 5. 変更があれば git commit & push (--no-push で抑止)
 
-最後に集計を1行のJSON(サマリ行 SUMMARY: {...})で出力する。
+最後に集計を1行のJSON(サマリ行 SUMMARY: {...})で出力し、
+data/last_run.json にも記録する(通知タスク scripts/wait_update.py が読む)。
+通常は Windows タスクスケジューラ(chomeme-map-daily-update)から
+scripts/run_update.py 経由で毎日21:30に起動される。
 """
 import json
 import subprocess
@@ -19,6 +22,9 @@ ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS = ROOT / "scripts"
 DATA = ROOT / "data"
 DOCS = ROOT / "docs"
+LOCK = DATA / "update.lock"          # 実行中の目印(多重起動防止)
+LAST_RUN = DATA / "last_run.json"    # 直近の実行結果(通知タスクが読む)
+PENDING = DATA / "pending_notify.json"  # まだ通知していない新着店舗の蓄積
 
 sys.path.insert(0, str(SCRIPTS))
 
@@ -107,7 +113,53 @@ def argval(name, default):
     return default
 
 
+def acquire_lock():
+    """多重起動を防ぐ。8時間以上前のロックは異常終了の残骸とみなして無視する"""
+    if LOCK.exists():
+        age = time.time() - LOCK.stat().st_mtime
+        if age < 8 * 3600:
+            print(f"another update is running (lock age {int(age)}s) -> skip")
+            return False
+        print("stale lock found -> overriding")
+    LOCK.write_text(json.dumps({"pid": __import__("os").getpid(),
+                                "started": time.strftime("%Y-%m-%dT%H:%M:%S%z")}),
+                    encoding="utf-8")
+    return True
+
+
+def record(status, summary=None, error=None):
+    """直近の実行結果を data/last_run.json に残す(通知タスクが読む)"""
+    LAST_RUN.write_text(json.dumps({
+        "finished": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+        "status": status,
+        "summary": summary,
+        "error": error,
+    }, ensure_ascii=False, indent=1), encoding="utf-8")
+    if summary and summary.get("new_shops"):
+        pend = []
+        if PENDING.exists():
+            pend = json.loads(PENDING.read_text(encoding="utf-8"))
+        pend = sorted(set(pend) | set(summary["new_shops"]))
+        PENDING.write_text(json.dumps(pend, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
 def main():
+    if not acquire_lock():
+        return 3
+    try:
+        summary = pipeline()
+        record("ok", summary)
+        return 0
+    except Exception as e:
+        err = f"{type(e).__name__}: {e}"
+        print(f"update failed: {err}")
+        record("error", error=err)
+        return 1
+    finally:
+        LOCK.unlink(missing_ok=True)
+
+
+def pipeline():
     push = "--no-push" not in sys.argv
     # 1回の実行で消化する字幕の本数と、IPブロック待機の許容回数
     backfill = argval("--backfill", 200)
@@ -183,8 +235,9 @@ def main():
         "pushed": changed and push,
     }
     print("SUMMARY: " + json.dumps(summary, ensure_ascii=False))
+    return summary
 
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
-    main()
+    sys.exit(main())
