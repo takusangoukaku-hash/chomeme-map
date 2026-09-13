@@ -225,7 +225,13 @@ def pipeline():
         git("add", "-A")
         git("commit", "-m", f"auto-update {time.strftime('%Y-%m-%d')}"
             + (f": 新規 {', '.join(new_shops)}" if new_shops else ""))
-        git("push")
+        # OneDrive が .git/objects を一時的にロックして push が失敗することがあるので数回リトライ
+        for attempt in range(4):
+            if git("push").returncode == 0:
+                break
+            time.sleep(30 * (attempt + 1))
+        else:
+            print("git push failed after retries (will be retried by the next run)")
 
     summary = {
         "new_videos": [v["title"] for v in new_videos],
