@@ -234,7 +234,8 @@ map.on('load', async () => {
   if (data.updated) {
     const p = data.progress;
     // 全動画の文字起こし解析は長期戦なので、更新日と一緒に進捗も出す
-    const prog = p ? `　字幕解析 ${p.scanned.toLocaleString()}/${p.videos.toLocaleString()}` : '';
+    const pct = p && p.videos ? ` (${(p.scanned / p.videos * 100).toFixed(1)}%)` : '';
+    const prog = p ? `　字幕解析 ${p.scanned.toLocaleString()}/${p.videos.toLocaleString()}${pct}` : '';
     document.getElementById('updated').textContent =
       `更新: ${new Date(data.updated).toLocaleDateString('ja-JP')}${prog}`;
   }
