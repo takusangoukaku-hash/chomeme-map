@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>星3.5マップ</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1c243a">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<style>
+  :root {
+    --navy: #1c243a; --gold: #f2b42d; --bg: #ffffff; --fg: #222; --sub: #777;
+    --line: #e6e3dc; --chip: #f1efe9; --chip-on: #1c243a; --chip-on-fg: #fff; --link: #1a0dab;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1d1e22; --fg: #e8e6e1; --sub: #a09d97; --line: #34353b;
+      --chip: #2c2d33; --chip-on: #f2b42d; --chip-on-fg: #1c243a; --link: #8ab4f8;
+    }
+  }
+  html, body { height: 100%; margin: 0; font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: var(--bg); color: var(--fg); }
+  #app { display: flex; flex-direction: column; height: 100%; }
+  header {
+    background: var(--navy); color: #fff; padding: 8px 12px;
+    padding-top: calc(8px + env(safe-area-inset-top));
+    display: flex; align-items: center; gap: 10px;
+  }
+  header h1 { margin: 0; font-size: 1.05rem; white-space: nowrap; }
+  header h1 span { color: var(--gold); }
+  #count { font-size: .75rem; opacity: .9; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  header button {
+    background: rgba(255,255,255,.14); color: #fff; border: 0; border-radius: 8px;
+    padding: 6px 10px; font-size: .78rem; font-family: inherit; cursor: pointer;
+  }
+  #map-canvas { height: 46vh; min-height: 220px; flex: none; }
+  #controls { border-bottom: 1px solid var(--line); padding: 8px 0 6px; }
+  .row { display: flex; gap: 6px; padding: 0 10px; align-items: center; }
+  .row + .row { margin-top: 6px; }
+  #chips { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  #chips::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: none; border: 0; border-radius: 999px; padding: 5px 11px; font-size: .78rem;
+    background: var(--chip); color: var(--fg); font-family: inherit; cursor: pointer; white-space: nowrap;
+  }
+  .chip.on { background: var(--chip-on); color: var(--chip-on-fg); font-weight: 700; }
+  .chip small { opacity: .65; margin-left: 3px; }
+  select, input[type=search] {
+    font-family: inherit; font-size: .8rem; border: 1px solid var(--line); border-radius: 8px;
+    padding: 5px 6px; background: var(--bg); color: var(--fg);
+  }
+  input[type=search] { flex: 1; min-width: 0; }
+  label.chk { font-size: .75rem; white-space: nowrap; display: flex; align-items: center; gap: 2px; }
+  #list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: env(safe-area-inset-bottom); }
+  .item { display: flex; gap: 10px; padding: 9px 12px; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .item:active { background: var(--chip); }
+  .item .rt { flex: none; width: 44px; text-align: center; }
+  .item .rt b { display: block; font-size: 1.05rem; }
+  .item .main { flex: 1; min-width: 0; }
+  .item .nm { font-weight: 700; font-size: .92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item .meta { font-size: .72rem; color: var(--sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item .dist { flex: none; font-size: .78rem; font-weight: 700; align-self: center; color: var(--sub); }
+  .more { display: block; width: 100%; padding: 12px; border: 0; background: none; color: var(--link);
+    font-family: inherit; font-size: .85rem; cursor: pointer; }
+  .empty { padding: 24px 18px; font-size: .85rem; line-height: 1.7; color: var(--sub); }
+  .empty b { color: var(--fg); }
+  .empty code { background: var(--chip); padding: 1px 5px; border-radius: 4px; font-size: .78rem; }
+
+  .maplibregl-popup-content {
+    padding: 10px 12px; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,.18);
+    font-family: inherit; background: var(--bg); color: var(--fg);
+  }
+  .maplibregl-popup-tip { border-top-color: var(--bg) !important; border-bottom-color: var(--bg) !important; }
+  .popup { width: 220px; }
+  .popup .nm { font-weight: 700; font-size: .95rem; margin-bottom: 2px; padding-right: 12px; }
+  .popup .meta { font-size: .74rem; color: var(--sub); margin-top: 2px; }
+  .popup .links { display: flex; gap: 12px; margin-top: 8px; }
+  .popup a { font-size: .82rem; color: var(--link); text-decoration: none; }
+  .stars { color: var(--gold); letter-spacing: -1px; font-size: .85rem; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1><span>★</span>3.5マップ</h1>
+    <span id="count"></span>
+    <button id="btn-import" type="button">データ読込</button>
+    <input id="file" type="file" accept=".json,application/json" hidden>
+  </header>
+  <div id="map-canvas"></div>
+  <div id="controls">
+    <div class="row" id="chips"></div>
+    <div class="row">
+      <select id="sort" aria-label="並び順">
+        <option value="dist">近い順</option>
+        <option value="rating">評価順</option>
+      </select>
+      <select id="min" aria-label="評価の下限">
+        <option value="3.5">3.5〜</option>
+        <option value="3.6">3.6〜</option>
+        <option value="3.7">3.7〜</option>
+        <option value="3.8">3.8〜</option>
+        <option value="4.0">4.0〜</option>
+      </select>
+      <input id="q" type="search" placeholder="店名・駅・ジャンル">
+      <label class="chk"><input id="inview" type="checkbox">地図内</label>
+    </div>
+  </div>
+  <div id="list"></div>
+</div>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script>
+// ===== グルメアプリ(gourmet-app)と同じベクトル地図スタイル =====
+// Apple Maps風の配色・ラベル制御・OpenFreeMapベクトルタイル・国土地理院フォント
+const JA_NAME = ['coalesce', ['get', 'name:ja'], ['get', 'name']];
+const FONT = ['NotoSansCJKjp-Regular'];
+
+function baseMapStyle(dark) {
+  const c = dark ? {
+    bg: '#212227', water: '#17344d', park: '#26372a', wood: '#223125',
+    building: '#2a2b31', roadMinor: '#33353b', roadMain: '#43464e',
+    roadCasing: '#1b1c20', highway: '#8d7439', rail: '#45464c',
+    boundary: '#4a4658', text: '#c9c7c2', halo: '#1a1b1f',
+    station: '#8fb0e8', poi: '#98938a',
+  } : {
+    bg: '#f5f4ef', water: '#a9d1e6', park: '#c8e2ae', wood: '#b9d8a0',
+    building: '#e8e4db', roadMinor: '#ffffff', roadMain: '#ffffff',
+    roadCasing: '#e2ddd2', highway: '#f9d975', rail: '#cfc9bf',
+    boundary: '#bcb2cb', text: '#55524c', halo: '#ffffff',
+    station: '#3a6db4', poi: '#85806f',
+  };
+  const label = (id, layer, filter, minzoom, size, color, haloW) => ({
+    id, type: 'symbol', source: 'omt', 'source-layer': layer, minzoom,
+    filter,
+    layout: {
+      'text-field': JA_NAME, 'text-font': FONT, 'text-size': size,
+      'text-max-width': 9, 'text-padding': 4,
+    },
+    paint: { 'text-color': color, 'text-halo-color': c.halo, 'text-halo-width': haloW },
+  });
+  const POI_COLOR = ['match', ['get', 'class'],
+    ['restaurant', 'fast_food', 'cafe', 'bar', 'beer', 'pub', 'ice_cream', 'food_court'], '#ef6c34',
+    ['convenience', 'grocery', 'supermarket', 'shop', 'clothing_store', 'bakery',
+      'books', 'gift', 'florist', 'butcher', 'bicycle', 'car', 'laundry', 'department_store'], '#3478f6',
+    '#12a56b'];
+  const POI_FILTER = ['all',
+    ['has', 'name'],
+    ['!', ['in', ['get', 'class'],
+      ['literal', ['railway', 'bus', 'college', 'stadium', 'museum', 'zoo', 'aquarium',
+        'theme_park', 'castle', 'airport', 'park', 'cemetery', 'ferry_terminal', 'harbor']]]]];
+  return {
+    version: 8,
+    glyphs: 'https://maps.gsi.go.jp/xyz/noto-jp/{fontstack}/{range}.pbf',
+    sources: {
+      omt: { type: 'vector', url: 'https://tiles.openfreemap.org/planet' },
+    },
+    layers: [
+      { id: 'bg', type: 'background', paint: { 'background-color': c.bg } },
+      { id: 'landcover-wood', type: 'fill', source: 'omt', 'source-layer': 'landcover',
+        filter: ['==', ['get', 'class'], 'wood'], paint: { 'fill-color': c.wood, 'fill-opacity': 0.6 } },
+      { id: 'landcover-grass', type: 'fill', source: 'omt', 'source-layer': 'landcover',
+        filter: ['==', ['get', 'class'], 'grass'], paint: { 'fill-color': c.park, 'fill-opacity': 0.5 } },
+      { id: 'landuse-green', type: 'fill', source: 'omt', 'source-layer': 'landuse',
+        filter: ['in', ['get', 'class'], ['literal', ['pitch', 'cemetery', 'stadium']]],
+        paint: { 'fill-color': c.park, 'fill-opacity': 0.6 } },
+      { id: 'park', type: 'fill', source: 'omt', 'source-layer': 'park',
+        paint: { 'fill-color': c.park, 'fill-opacity': 0.75 } },
+      { id: 'water', type: 'fill', source: 'omt', 'source-layer': 'water',
+        paint: { 'fill-color': c.water } },
+      { id: 'waterway', type: 'line', source: 'omt', 'source-layer': 'waterway',
+        paint: { 'line-color': c.water, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 0.7, 16, 3] } },
+      { id: 'building', type: 'fill', source: 'omt', 'source-layer': 'building', minzoom: 14,
+        paint: { 'fill-color': c.building, 'fill-opacity': ['interpolate', ['linear'], ['zoom'], 14, 0.4, 16, 0.9] } },
+      { id: 'road-service', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 14,
+        filter: ['in', ['get', 'class'], ['literal', ['service', 'track', 'path']]],
+        paint: { 'line-color': c.roadMinor, 'line-width': ['interpolate', ['linear'], ['zoom'], 14, 0.6, 18, 4] } },
+      { id: 'road-minor-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 13,
+        filter: ['==', ['get', 'class'], 'minor'], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadCasing, 'line-width': ['interpolate', ['linear'], ['zoom'], 13, 1.6, 18, 9] } },
+      { id: 'road-minor', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 12,
+        filter: ['==', ['get', 'class'], 'minor'], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadMinor, 'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.7, 13, 1, 18, 7.5] } },
+      { id: 'road-mid-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 10,
+        filter: ['in', ['get', 'class'], ['literal', ['secondary', 'tertiary']]], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadCasing, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1.0, 13, 2.2, 18, 12] } },
+      { id: 'road-mid', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 10,
+        filter: ['in', ['get', 'class'], ['literal', ['secondary', 'tertiary']]], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadMain, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 0.5, 13, 1.5, 18, 10] } },
+      { id: 'road-major-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 8,
+        filter: ['in', ['get', 'class'], ['literal', ['primary', 'trunk']]], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadCasing, 'line-width': ['interpolate', ['linear'], ['zoom'], 8, 0.9, 12, 2.2, 14, 4.5, 18, 14] } },
+      { id: 'road-major', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 8,
+        filter: ['in', ['get', 'class'], ['literal', ['primary', 'trunk']]], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.roadMain, 'line-width': ['interpolate', ['linear'], ['zoom'], 8, 0.6, 12, 1.5, 14, 3.2, 18, 12] } },
+      { id: 'motorway-casing', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 6,
+        filter: ['==', ['get', 'class'], 'motorway'], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': dark ? '#5c4c22' : '#e8bd50', 'line-width': ['interpolate', ['linear'], ['zoom'], 6, 0.7, 10, 1.7, 13, 4.5, 18, 15] } },
+      { id: 'motorway', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 6,
+        filter: ['==', ['get', 'class'], 'motorway'], layout: { 'line-cap': 'round' },
+        paint: { 'line-color': c.highway, 'line-width': ['interpolate', ['linear'], ['zoom'], 6, 0.5, 10, 1.2, 13, 3.2, 18, 12] } },
+      { id: 'rail', type: 'line', source: 'omt', 'source-layer': 'transportation', minzoom: 11,
+        filter: ['==', ['get', 'class'], 'rail'],
+        paint: { 'line-color': c.rail, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.8, 16, 2.2] } },
+      { id: 'boundary', type: 'line', source: 'omt', 'source-layer': 'boundary', minzoom: 5,
+        filter: ['<=', ['get', 'admin_level'], 4],
+        paint: { 'line-color': c.boundary, 'line-width': 1, 'line-dasharray': [3, 2] } },
+      label('place-city', 'place', ['==', ['get', 'class'], 'city'], 4,
+        ['interpolate', ['linear'], ['zoom'], 5, 10, 12, 13], c.text, 1.4),
+      label('place-town', 'place', ['==', ['get', 'class'], 'town'], 9,
+        ['interpolate', ['linear'], ['zoom'], 9, 9.5, 14, 12], c.text, 1.3),
+      label('station-label', 'poi', ['==', ['get', 'class'], 'railway'], 12,
+        ['interpolate', ['linear'], ['zoom'], 12, 9.5, 16, 12], c.station, 1.2),
+      label('poi-major', 'poi',
+        ['any',
+          ['all', ['==', ['get', 'class'], 'college'], ['==', ['get', 'subclass'], 'university']],
+          ['in', ['get', 'class'], ['literal', ['stadium', 'museum', 'zoo', 'aquarium', 'theme_park', 'castle']]],
+        ], 14, 10.5, c.poi, 1.2),
+      label('airport-label', 'aerodrome_label', ['has', 'iata'], 9, 10.5, c.poi, 1.2),
+      { id: 'poi-labels', type: 'symbol', source: 'omt', 'source-layer': 'poi', minzoom: 16,
+        filter: POI_FILTER,
+        layout: {
+          'text-field': JA_NAME, 'text-font': FONT, 'text-size': 10.5, 'text-max-width': 8,
+          'symbol-sort-key': ['coalesce', ['get', 'rank'], 100],
+        },
+        paint: { 'text-color': POI_COLOR, 'text-halo-color': c.halo, 'text-halo-width': 1.2 } },
+    ],
+  };
+}
+
+
+// ===== 星3.5マップ =====
+// データ(食べログ由来)はこのページに同梱しない。PCで作った tabemap.json を
+// 「データ読込」で端末に取り込み、localStorage にだけ保存する(公開サーバーに置かない)。
+const DATA_KEY = 'tabemap.data.v1';
+const PREF_KEY = 'tabemap.prefs.v1';
+const PAGE = 100;
+
+// 食べログのジャンル表記 → 絞り込み用の大分類(1店が複数に入ることもある)
+const GENRES = [
+  ['ラーメン', /ラーメン|つけ麺|担々麺|油そば|まぜそば|中華そば/],
+  ['寿司', /寿司|鮨/],
+  ['焼肉', /焼肉|ホルモン|ジンギスカン/],
+  ['焼き鳥', /焼き鳥|焼鳥|鳥料理|鶏料理/],
+  ['そば・うどん', /そば|蕎麦|うどん/],
+  ['天ぷら・とんかつ', /天ぷら|とんかつ|串揚げ|揚げ物/],
+  ['うなぎ', /うなぎ|鰻/],
+  ['和食', /日本料理|割烹|懐石|小料理|和食|郷土料理|海鮮|魚介|ふぐ|かに|すき焼き|しゃぶしゃぶ|おでん|もつ鍋|水炊き|鍋|おばんざい|定食|丼/],
+  ['居酒屋・バー', /居酒屋|バー|ダイニングバー|ワイン|ビア|日本酒|立ち飲み|酒場/],
+  ['中華', /中華料理|四川|広東|上海|北京|台湾|餃子|飲茶|点心|小籠包/],
+  ['韓国', /韓国/],
+  ['カレー', /カレー/],
+  ['アジア・エスニック', /タイ料理|ベトナム|インド|ネパール|スリランカ|エスニック|アジア|中東|トルコ/],
+  ['イタリアン', /イタリアン|パスタ|ピザ/],
+  ['フレンチ', /フレンチ|ビストロ/],
+  ['洋食・ステーキ', /洋食|ハンバーグ|オムライス|ステーキ|ハンバーガー|鉄板焼き|肉料理|スペイン|西洋|ヨーロッパ|メキシコ|アメリカ/],
+  ['カフェ・喫茶', /カフェ|喫茶/],
+  ['パン', /パン|サンドイッチ|ベーグル/],
+  ['スイーツ', /スイーツ|ケーキ|洋菓子|和菓子|甘味|チョコ|ジェラート|アイス|パフェ|かき氷|ドーナツ|クレープ|たい焼き|大判焼き|プリン/],
+];
+const OTHER = 'その他';
+
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function loadJSON(key, fallback) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+  catch (e) { return fallback; }
+}
+
+// 読み込むファイルは外部由来なので、型と値を固定してから使う
+function sanitize(data) {
+  if (!data || data.format !== 'tabemap/1' || !Array.isArray(data.shops)) {
+    throw new Error('星3.5マップ用のファイル(tabemap.json)ではありません');
+  }
+  const str = (v, n = 200) => (typeof v === 'string' ? v : '').slice(0, n);
+  const shops = [];
+  for (const s of data.shops) {
+    const lat = Number(s.lat), lng = Number(s.lng), rating = Number(s.rating);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(rating)) continue;
+    const url = str(s.url, 300);
+    shops.push({
+      id: str(String(s.id ?? ''), 20), name: str(s.name, 120), rating,
+      genre: str(s.genre), station: str(s.station), address: str(s.address),
+      dinner: str(s.dinner, 40), lunch: str(s.lunch, 40), lat, lng,
+      url: /^https:\/\/tabelog\.com\/[\w/]+$/.test(url) ? url : '',
+    });
+  }
+  return { updated: str(data.updated, 40), shops };
+}
+
+function categorize(shop) {
+  const cats = GENRES.filter(([, re]) => re.test(shop.genre)).map(([name]) => name);
+  return cats.length ? cats : [OTHER];
+}
+
+function haversine(a, b) {
+  const R = 6371e3, toRad = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * toRad, dLng = (b.lng - a.lng) * toRad;
+  const h = Math.sin(dLat / 2) ** 2 +
+    Math.cos(a.lat * toRad) * Math.cos(b.lat * toRad) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+function fmtDist(m) {
+  if (m == null) return '';
+  return m < 1000 ? `${Math.round(m / 10) * 10}m` : `${(m / 1000).toFixed(m < 10000 ? 1 : 0)}km`;
+}
+function starsText(r) {
+  const full = Math.floor(r), half = r - full >= 0.5 ? 1 : 0;
+  return '★'.repeat(full) + (half ? '☆' : '');
+}
+function ratingColor(r) {
+  return r >= 4.0 ? '#d4371c' : r >= 3.8 ? '#ef7d1a' : r >= 3.6 ? '#e8a91c' : '#b99a52';
+}
+
+// ----- 状態 -----
+let data = loadJSON(DATA_KEY, null);
+const prefs = Object.assign({ genres: [], sort: 'dist', min: '3.5', inview: false }, loadJSON(PREF_KEY, {}));
+let userPos = null;
+let shown = PAGE;
+let filtered = [];
+
+function savePrefs() {
+  try { localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); } catch (e) { /* 保存できなくても動く */ }
+}
+function prepare() {
+  if (!data) return;
+  for (const s of data.shops) s.cats = categorize(s);
+}
+prepare();
+
+// ----- 地図 -----
+const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+const map = new maplibregl.Map({
+  container: 'map-canvas',
+  style: baseMapStyle(dark),
+  center: [139.72, 35.68], zoom: 11, minZoom: 4, maxZoom: 19,
+  attributionControl: { compact: true },
+});
+map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+const geo = new maplibregl.GeolocateControl({
+  positionOptions: { enableHighAccuracy: true },
+  trackUserLocation: true, showAccuracyCircle: false,
+  fitBoundsOptions: { maxZoom: 14 },  // 周りの店が見える程度の寄り
+});
+map.addControl(geo, 'top-right');
+map.on('error', (e) => console.warn('MapLibre:', e && e.error));
+
+geo.on('geolocate', (e) => {
+  const first = !userPos;
+  userPos = { lat: e.coords.latitude, lng: e.coords.longitude };
+  if (first) { shown = PAGE; render(); }
+  else if (prefs.sort === 'dist') throttledRender();
+});
+let renderTimer = null;
+function throttledRender() {
+  if (renderTimer) return;
+  renderTimer = setTimeout(() => { renderTimer = null; render(); }, 3000);
+}
+
+map.on('load', () => {
+  map.addSource('shops', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+  map.addLayer({
+    id: 'shops-circle', type: 'circle', source: 'shops',
+    paint: {
+      'circle-color': ['get', 'color'],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 9, 3.5, 13, 7, 15, 12],
+      'circle-stroke-color': '#ffffff',
+      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 9, 0.8, 15, 1.8],
+    },
+  });
+  map.addLayer({
+    id: 'shops-label', type: 'symbol', source: 'shops', minzoom: 14,
+    layout: {
+      'text-field': ['get', 'label'], 'text-font': FONT, 'text-size': 9.5,
+      'text-allow-overlap': true,
+    },
+    paint: { 'text-color': '#ffffff' },
+  });
+  map.on('click', 'shops-circle', (e) => {
+    const f = e.features && e.features[0];
+    const shop = f && byId.get(f.properties.id);
+    if (shop) openPopup(shop);
+  });
+  map.on('mouseenter', 'shops-circle', () => { map.getCanvas().style.cursor = 'pointer'; });
+  map.on('mouseleave', 'shops-circle', () => { map.getCanvas().style.cursor = ''; });
+  map.on('moveend', () => { if (prefs.inview) { shown = PAGE; renderList(); } });
+
+  render(true);
+  if (data) geo.trigger();  // 現在地の許可を求めて、取れたら近い順に並ぶ
+});
+
+let byId = new Map();
+let popup = null;
+
+function openPopup(shop) {
+  const node = document.createElement('div');
+  node.className = 'popup';
+  const dist = userPos ? ` · ${fmtDist(haversine(userPos, shop))}` : '';
+  const budget = [shop.dinner && `夜 ${shop.dinner}`, shop.lunch && `昼 ${shop.lunch}`].filter(Boolean).join(' / ');
+  const gmaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name + ' ' + (shop.address || ''))}`;
+  node.innerHTML = `
+    <div class="nm">${esc(shop.name)}</div>
+    <div><span class="stars">${starsText(shop.rating)}</span> <b>${shop.rating.toFixed(2)}</b>${esc(dist)}</div>
+    <div class="meta">${esc(shop.genre)}</div>
+    <div class="meta">${esc(shop.station)}</div>
+    ${budget ? `<div class="meta">${esc(budget)}</div>` : ''}
+    <div class="links">
+      ${shop.url ? `<a href="${esc(shop.url)}" target="_blank" rel="noopener">食べログ</a>` : ''}
+      <a href="${esc(gmaps)}" target="_blank" rel="noopener">Googleマップ</a>
+    </div>`;
+  if (popup) popup.remove();
+  popup = new maplibregl.Popup({ offset: 12, maxWidth: '250px' })
+    .setLngLat([shop.lng, shop.lat]).setDOMContent(node).addTo(map);
+}
+
+// ----- 絞り込みと描画 -----
+function applyFilter() {
+  if (!data) return [];
+  const min = Number(prefs.min) || 3.5;
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  const sel = new Set(prefs.genres);
+  return data.shops.filter((s) =>
+    s.rating >= min &&
+    (!sel.size || s.cats.some((c) => sel.has(c))) &&
+    (!q || (s.name + ' ' + s.genre + ' ' + s.station + ' ' + s.address).toLowerCase().includes(q)));
+}
+
+function renderChips() {
+  const el = document.getElementById('chips');
+  if (!data) { el.innerHTML = ''; return; }
+  const min = Number(prefs.min) || 3.5;
+  const counts = new Map();
+  for (const s of data.shops) {
+    if (s.rating < min) continue;
+    for (const c of s.cats) counts.set(c, (counts.get(c) || 0) + 1);
+  }
+  const names = [...GENRES.map(([n]) => n), OTHER].filter((n) => counts.get(n) || prefs.genres.includes(n));
+  el.innerHTML = `<button type="button" class="chip${prefs.genres.length ? '' : ' on'}" data-g="">すべて</button>` +
+    names.map((n) => `<button type="button" class="chip${prefs.genres.includes(n) ? ' on' : ''}" data-g="${esc(n)}">${esc(n)}<small>${counts.get(n) || 0}</small></button>`).join('');
+}
+
+document.getElementById('chips').addEventListener('click', (e) => {
+  const b = e.target.closest('.chip');
+  if (!b) return;
+  const g = b.dataset.g;
+  if (!g) prefs.genres = [];
+  else if (prefs.genres.includes(g)) prefs.genres = prefs.genres.filter((x) => x !== g);
+  else prefs.genres = [...prefs.genres, g];
+  savePrefs();
+  shown = PAGE;
+  render();
+});
+
+function render(fit) {
+  filtered = applyFilter();
+  byId = new Map(filtered.map((s) => [s.id, s]));
+  renderChips();
+  const src = map.getSource && map.getSource('shops');
+  if (src) {
+    src.setData({
+      type: 'FeatureCollection',
+      features: filtered.map((s) => ({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [s.lng, s.lat] },
+        properties: { id: s.id, color: ratingColor(s.rating), label: s.rating.toFixed(2) },
+      })),
+    });
+    if (fit && filtered.length && !userPos) {
+      const b = new maplibregl.LngLatBounds();
+      for (const s of filtered) b.extend([s.lng, s.lat]);
+      map.fitBounds(b, { padding: 30, maxZoom: 14, duration: 0 });
+    }
+  }
+  const total = data ? data.shops.length : 0;
+  document.getElementById('count').textContent = data
+    ? `${filtered.length.toLocaleString()} / ${total.toLocaleString()}店` +
+      (data.updated ? `・${new Date(data.updated).toLocaleDateString('ja-JP')}更新` : '')
+    : '';
+  renderList();
+}
+
+function renderList() {
+  const list = document.getElementById('list');
+  if (!data) {
+    list.innerHTML = `<div class="empty">
+      <b>まだデータがありません。</b><br>
+      1. PCで <code>python scripts/tabelog/scrape.py</code> を実行<br>
+      2. できた <code>data/tabelog/tabemap.json</code> をこの端末に送る<br>
+      3. 右上の「データ読込」で選ぶ<br><br>
+      データはこの端末の中にだけ保存され、どこにもアップロードされません。</div>`;
+    return;
+  }
+  let rows = filtered;
+  if (prefs.inview && map.loaded()) {
+    const b = map.getBounds();
+    rows = rows.filter((s) => b.contains([s.lng, s.lat]));
+  }
+  const withDist = rows.map((s) => ({ s, d: userPos ? haversine(userPos, s) : null }));
+  if (prefs.sort === 'dist' && userPos) withDist.sort((a, b) => a.d - b.d);
+  else withDist.sort((a, b) => b.s.rating - a.s.rating);
+
+  if (!withDist.length) {
+    list.innerHTML = '<div class="empty">条件に合う店がありません。</div>';
+    return;
+  }
+  const note = prefs.sort === 'dist' && !userPos
+    ? '<div class="empty" style="padding:8px 12px">現在地が取れないので評価順で表示中(地図右上の◎で現在地)</div>' : '';
+  list.innerHTML = note + withDist.slice(0, shown).map(({ s, d }) => `
+    <div class="item" data-id="${esc(s.id)}">
+      <div class="rt"><b style="color:${ratingColor(s.rating)}">${s.rating.toFixed(2)}</b></div>
+      <div class="main">
+        <div class="nm">${esc(s.name)}</div>
+        <div class="meta">${esc(s.genre)}</div>
+        <div class="meta">${esc(s.station)}${s.dinner ? ' · 夜 ' + esc(s.dinner) : ''}</div>
+      </div>
+      <div class="dist">${esc(fmtDist(d))}</div>
+    </div>`).join('') +
+    (withDist.length > shown ? `<button type="button" class="more">さらに表示(残り${withDist.length - shown}店)</button>` : '');
+}
+
+document.getElementById('list').addEventListener('click', (e) => {
+  if (e.target.closest('.more')) { shown += PAGE; renderList(); return; }
+  const item = e.target.closest('.item');
+  const shop = item && byId.get(item.dataset.id);
+  if (!shop) return;
+  map.flyTo({ center: [shop.lng, shop.lat], zoom: Math.max(map.getZoom(), 15.5), duration: 600 });
+  openPopup(shop);
+});
+
+// ----- 操作 -----
+const $sort = document.getElementById('sort'), $min = document.getElementById('min'),
+  $inview = document.getElementById('inview'), $q = document.getElementById('q');
+$sort.value = prefs.sort; $min.value = prefs.min; $inview.checked = prefs.inview;
+$sort.addEventListener('change', () => {
+  prefs.sort = $sort.value; savePrefs(); shown = PAGE;
+  if (prefs.sort === 'dist' && !userPos) geo.trigger();
+  renderList();
+});
+$min.addEventListener('change', () => { prefs.min = $min.value; savePrefs(); shown = PAGE; render(); });
+$inview.addEventListener('change', () => { prefs.inview = $inview.checked; savePrefs(); shown = PAGE; renderList(); });
+let qTimer = null;
+$q.addEventListener('input', () => { clearTimeout(qTimer); qTimer = setTimeout(() => { shown = PAGE; render(); }, 250); });
+
+document.getElementById('btn-import').addEventListener('click', () => document.getElementById('file').click());
+document.getElementById('file').addEventListener('change', async (e) => {
+  const f = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if (!f) return;
+  try {
+    const next = sanitize(JSON.parse(await f.text()));
+    if (!next.shops.length) throw new Error('座標付きの店が1件もありません');
+    try { localStorage.setItem(DATA_KEY, JSON.stringify(next)); }
+    catch (err) { alert('端末に保存できませんでした(容量不足の可能性)。今回の表示だけ反映します。'); }
+    data = next;
+    prepare();
+    shown = PAGE;
+    render(true);
+    if (!userPos) geo.trigger();
+    alert(`${next.shops.length.toLocaleString()}店を読み込みました`);
+  } catch (err) {
+    alert('読み込めませんでした: ' + err.message);
+  }
+});
+
+render();
+
+// PWA: Service Worker(このフォルダ専用。ちょめめマップの SW とはキャッシュ名を分けている)
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>

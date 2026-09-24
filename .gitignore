@@ -6,3 +6,7 @@ data/update.lock
 data/update.log
 data/last_run.json
 data/pending_notify.json
+# 星3.5マップ: 食べログ由来のデータは個人利用のみ。絶対に公開しない
+data/tabelog/
+docs/tabelog/*.json
+!docs/tabelog/manifest.json

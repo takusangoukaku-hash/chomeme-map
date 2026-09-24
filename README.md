@@ -43,3 +43,21 @@ scripts/build_shops.py        マージ+ジオコーディング(国土地理院
 - YouTube字幕エンドポイントはIP単位で厳しくレート制限される(15リクエスト程度でブロック)。
   fetch_transcripts.py は再開可能なので、止まっても再実行すればよい
 - ジオコーディング結果は data/geocode_cache.json にキャッシュされる
+
+## おまけ: 星3.5マップ(`docs/tabelog/`, `scripts/tabelog/`)
+
+食べログの評価3.5以上の店を地図に出し、現在地から近い順・ジャンル別に探す**個人用**アプリ。
+
+- **データは公開しない**: 食べログ由来のデータ(`data/tabelog/`)は .gitignore 済みで、
+  Pages にも載らない。公開されるのはデータの無いアプリの画面だけ
+- **使い方**
+  1. `scripts/tabelog/areas.txt` で取得エリアを選ぶ(初期は新宿・渋谷のみ)
+  2. PCで `python scripts/tabelog/scrape.py` → `data/tabelog/tabemap.json` ができる
+     (初回は店ごとに座標を取るので1エリア数十分。2回目以降は一覧の再取得だけで数分)
+  3. `tabemap.json` をスマホに送り(Googleドライブ等)、
+     https://takusangoukaku-hash.github.io/chomeme-map/tabelog/ の「データ読込」で選ぶ。
+     データは端末の localStorage にだけ保存される
+- 取得は1リクエスト3〜5秒間隔。403/429 が返ったら即停止するので、半日以上空けて再実行
+- 店が1件も読めない時は食べログのHTMLが変わった可能性。`--debug` で HTML を
+  `data/tabelog/debug/` に保存して `scrape.py` の正規表現を直す
+- 食べログの利用規約は自動収集を禁止している。取得頻度を上げない・結果を他人に渡さないこと
