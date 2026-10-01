@@ -99,6 +99,25 @@ def git(*args):
     return r
 
 
+def push_with_sync():
+    """未pushのコミットを push する。リモートに別のコミット(他端末やクラウドの作業)があれば
+    rebase で取り込んでから push する。前回失敗分もここで一緒に送られる。成功なら True"""
+    for attempt in range(4):
+        if git("fetch", "origin").returncode == 0:
+            if git("rev-list", "--count", "origin/main..HEAD").stdout.strip() == "0":
+                return True  # 送るものが無い
+            if git("rev-list", "--count", "HEAD..origin/main").stdout.strip() != "0":
+                if git("rebase", "origin/main").returncode != 0:
+                    git("rebase", "--abort")
+                    raise RuntimeError("git rebase origin/main が衝突したため push できません(手動で統合が必要)")
+            if git("push", "origin", "HEAD:main").returncode == 0:
+                return True
+        # OneDrive が .git/objects を一時的にロックして失敗することがあるので間を空けてリトライ
+        time.sleep(30 * (attempt + 1))
+    print("git push failed after retries (will be retried by the next run)")
+    return False
+
+
 def shop_names(payload):
     shops = payload if isinstance(payload, list) else payload.get("shops", [])
     return {s["name"] for s in shops}
@@ -221,24 +240,20 @@ def pipeline():
     new_shops = sorted(shop_names(after) - shop_names(before))
 
     changed = git("status", "--porcelain").stdout.strip() != ""
-    if changed and push:
-        git("add", "-A")
-        git("commit", "-m", f"auto-update {time.strftime('%Y-%m-%d')}"
-            + (f": 新規 {', '.join(new_shops)}" if new_shops else ""))
-        # OneDrive が .git/objects を一時的にロックして push が失敗することがあるので数回リトライ
-        for attempt in range(4):
-            if git("push").returncode == 0:
-                break
-            time.sleep(30 * (attempt + 1))
-        else:
-            print("git push failed after retries (will be retried by the next run)")
+    pushed = False
+    if push:
+        if changed:
+            git("add", "-A")
+            git("commit", "-m", f"auto-update {time.strftime('%Y-%m-%d')}"
+                + (f": 新規 {', '.join(new_shops)}" if new_shops else ""))
+        pushed = push_with_sync()
 
     summary = {
         "new_videos": [v["title"] for v in new_videos],
         "new_shops": new_shops,
         "total_shops": len(shop_names(after)),
         "progress": after.get("progress"),
-        "pushed": changed and push,
+        "pushed": pushed,
     }
     print("SUMMARY: " + json.dumps(summary, ensure_ascii=False))
     return summary
